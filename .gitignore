@@ -1,0 +1,29 @@
+# Datos personales y material del diplomado: nunca al repositorio
+entregables/
+rubricas/
+talleres/
+images/
+*.csv
+
+# Modelos de Revit
+samples/models/
+*.rvt
+*.rfa
+*.rte
+*.rft
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+dist/
+build/
+
+# Salidas locales de scripts
+scripts/*_out.txt
+
+# Respaldos y respuestas de encuesta
+docs/*respaldo*.pdf
+docs/*.bak-*.md
+docs/anexo-A-*.md

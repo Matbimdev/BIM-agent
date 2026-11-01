@@ -2,6 +2,8 @@
 """Registro de rutas BIM Agent en pyRevit Routes (ADR-001, ADR-006). Solo lectura."""
 from pyrevit import routes
 from bim_agent_bridge import auth
+from bim_agent_bridge import routes as bridge_routes
+from bim_agent_bridge.handlers import overview
 
 api = routes.API("bim-agent")
 auth.get_or_create_token()
@@ -18,3 +20,8 @@ def health(request, uiapp):
         "revit_version": uiapp.Application.VersionNumber,
         "document": doc.Title if doc else None,
     })
+
+
+@api.route("/overview", methods=["POST"])
+def overview_route(request, uiapp):
+    return bridge_routes.handle(request, uiapp, overview.run)

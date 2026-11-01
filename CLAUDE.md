@@ -115,7 +115,13 @@ antes de darla por cerrada.
 
 Fase 0 cerrada: contratos escritos (2026-10-18). Fase 1 en curso. Fechas: Hito 2 20/10/2026, Hito 3 12/11/2026.
 
-### Pendientes al 2026-10-18
+### Estado al 2026-11-01
+
+- Repositorio Git local, privado por decision del autor. Licencia propietaria en `LICENSE`. `.gitignore` excluye encuesta, anexos, entregables y modelos.
+- Roadmap reordenado en `docs/04-roadmap.md`.
+- `/overview` y `get_model_overview` escritos, con 10 tests sin Revit. Falta la prueba contra Revit 2026 con `scripts/3_smoke_overview.bat` y el registro en Claude Desktop.
+
+### Pendientes al 2026-10-18 (historico)
 
 - Hito 2 (vence 20/10 23:59): integrar encuesta ampliada (marcador [PENDIENTE] en Tabla 1 de `docs/08-hito02-plan.md`, sin pasar de 12 paginas), regenerar PDF con `scripts/build.sh`, subir PDF y link a Classroom. Prototipo ya publico (v6, 2026-10-18): las 10 tools en el recorrido, reglas en lenguaje claro.
 - F1 vertical slice: `BIMAgent.extension` con `/health` y `/overview`, `mcp-server` con `get_model_overview`. Modelo de prueba: Snowdon Towers Sample Structural.

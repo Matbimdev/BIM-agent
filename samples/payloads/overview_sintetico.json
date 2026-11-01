@@ -1,0 +1,12 @@
+{
+  "project": {"name": "Proyecto de prueba", "number": "P-001", "client": "", "address": "",
+              "revit_version": "2026",
+              "units": {"length": "feetFractionalInches", "area": "squareFeet", "volume": "unidadRara"},
+              "worksharing": false, "central_path": ""},
+  "categories": [{"category": "Walls", "count": 12}, {"category": "Floors", "count": 40}],
+  "levels": [{"name": "N2", "elevation": {"value": 3.04801, "unit": "m"}},
+             {"name": "N1", "elevation": {"value": 0.0, "unit": "m"}}],
+  "phases": ["Existente", "Nueva construccion"],
+  "worksets": [],
+  "links": {"rvt": 1, "ifc": 0, "cad_linked": 2, "cad_imported": 1}
+}

@@ -7,6 +7,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 candidates = [Path(os.environ["APPDATA"]) / "Claude"]
 candidates += [Path(p) for p in glob.glob(os.path.join(
+    os.environ.get("LOCALAPPDATA", ""), "Claude-Data", "claude_*"))]
+candidates += [Path(p) for p in glob.glob(os.path.join(
     os.environ.get("LOCALAPPDATA", ""), "Packages", "Claude_*", "LocalCache", "Roaming", "Claude"))]
 folders = [c for c in candidates if c.is_dir()]
 if not folders:

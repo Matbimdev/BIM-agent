@@ -7,9 +7,9 @@ Fechas oficiales: Hito 2 20/10/2026, Hito 3 12/11/2026. Detalle en `08-hito02-pl
 - [x] `02-contrato-herramientas.md` con las 10 tools
 - [x] ADR-001 a ADR-005
 
-## F1 - Vertical slice (1 y 2/11)
-- [x] Bridge: `startup.py` + `/health` + `/overview` (falta prueba en Revit)
-- [x] MCP: `revit_client.py` + `get_model_overview` (falta registro en Claude Desktop)
+## F1 - Vertical slice (cerrada 01/11)
+- [x] Bridge: `startup.py` + `/health` + `/overview`
+- [x] MCP: `revit_client.py` + `get_model_overview` + registro en Claude Desktop
 - Salida: Claude responde la radiografia leyendo un modelo real
 
 ## F2 - Flujo completo (3 y 4/11)

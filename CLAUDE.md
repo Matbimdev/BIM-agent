@@ -119,7 +119,8 @@ Fase 0 cerrada: contratos escritos (2026-10-18). Fase 1 en curso. Fechas: Hito 2
 
 - Repositorio Git local, privado por decision del autor. Licencia propietaria en `LICENSE`. `.gitignore` excluye encuesta, anexos, entregables y modelos.
 - Roadmap reordenado en `docs/04-roadmap.md`.
-- `/overview` y `get_model_overview` escritos, con 10 tests sin Revit. Falta la prueba contra Revit 2026 con `scripts/3_smoke_overview.bat` y el registro en Claude Desktop.
+- F1 cerrada (2026-11-01): `get_model_overview` probada de extremo a extremo por MCP contra Revit 2026 con Snowdon: 1.450 elementos de modelo, 1.281 excluidos. Revit 2027 sin validar: el servidor de Routes no respondio, causa sin diagnosticar.
+- Siguiente: `get_warnings` y `export_report` basico.
 
 ### Pendientes al 2026-10-18 (historico)
 

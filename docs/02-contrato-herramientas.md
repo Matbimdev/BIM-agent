@@ -53,7 +53,7 @@ Salida:
   "elements_total": 18450
 }
 ```
-Truncado: `categories` a 60 entradas ordenadas por conteo; `categories_meta` agrega `{"truncated", "total", "returned", "hint"}`. `elements_total` cuenta todas las categorias de modelo, aunque se trunque la lista. `project.units` son las unidades de visualizacion del proyecto; cada magnitud declara su propia unidad.
+Truncado: `categories` a 60 entradas ordenadas por conteo; `categories_meta` agrega `{"truncated", "total", "returned", "hint"}`. `elements_total` cuenta los elementos de modelo, aunque se trunque la lista. Se excluyen por `BuiltInCategory` las categorias que no son elementos del modelo (bocetos, materiales, planos, puntos base y similares); `excluded_non_model` declara `{"elements", "categories"}`. El bridge entrega `built_in` en cada categoria y `mcp-server` aplica la exclusion. `project.units` son las unidades de visualizacion del proyecto; cada magnitud declara su propia unidad.
 Endpoint: `/overview`.
 
 ## 2. query_elements

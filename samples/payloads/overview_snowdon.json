@@ -1,0 +1,299 @@
+{
+  "phases": [
+    "Existing",
+    "New Construction"
+  ],
+  "worksets": [],
+  "categories": [
+    {
+      "built_in": "OST_PropertySet",
+      "category": "Material Assets",
+      "count": 75
+    },
+    {
+      "built_in": "OST_SketchLines",
+      "category": "<Sketch>",
+      "count": 850
+    },
+    {
+      "built_in": "OST_Floors",
+      "category": "Floors",
+      "count": 27
+    },
+    {
+      "built_in": "OST_Walls",
+      "category": "Walls",
+      "count": 58
+    },
+    {
+      "built_in": "OST_Areas",
+      "category": "Areas",
+      "count": 7
+    },
+    {
+      "built_in": "OST_Materials",
+      "category": "Materials",
+      "count": 113
+    },
+    {
+      "built_in": "OST_Rebar",
+      "category": "Structural Rebar",
+      "count": 14
+    },
+    {
+      "built_in": "OST_StructuralFraming",
+      "category": "Structural Framing",
+      "count": 942
+    },
+    {
+      "built_in": "OST_SunStudy",
+      "category": "Sun Path",
+      "count": 17
+    },
+    {
+      "built_in": "OST_MEPSpaceSeparationLines",
+      "category": "<Space Separation>",
+      "count": 2
+    },
+    {
+      "built_in": "OST_SharedBasePoint",
+      "category": "Survey Point",
+      "count": 1
+    },
+    {
+      "built_in": "OST_HVAC_Zones",
+      "category": "HVAC Zones",
+      "count": 1
+    },
+    {
+      "built_in": "OST_ProjectInformation",
+      "category": "Project Information",
+      "count": 1
+    },
+    {
+      "built_in": "OST_StructConnections",
+      "category": "Structural Connections",
+      "count": 70
+    },
+    {
+      "built_in": "OST_Cameras",
+      "category": "Cameras",
+      "count": 14
+    },
+    {
+      "built_in": "OST_ShaftOpening",
+      "category": "Shaft Openings",
+      "count": 1
+    },
+    {
+      "built_in": "OST_StructuralColumns",
+      "category": "Structural Columns",
+      "count": 74
+    },
+    {
+      "built_in": "OST_AreaSchemeLines",
+      "category": "<Area Boundary>",
+      "count": 104
+    },
+    {
+      "built_in": "OST_PreviewLegendComponents",
+      "category": "Legend Components",
+      "count": 76
+    },
+    {
+      "built_in": "OST_PipeSegments",
+      "category": "Pipe Segments",
+      "count": 11
+    },
+    {
+      "built_in": "OST_CoordinateSystem",
+      "category": "Internal Origin",
+      "count": 1
+    },
+    {
+      "built_in": "OST_StructuralFoundation",
+      "category": "Structural Foundations",
+      "count": 90
+    },
+    {
+      "built_in": "OST_Sheets",
+      "category": "Sheets",
+      "count": 12
+    },
+    {
+      "built_in": "OST_ProjectBasePoint",
+      "category": "Project Base Point",
+      "count": 1
+    },
+    {
+      "built_in": "OST_TopographyContours",
+      "category": "Primary Contours",
+      "count": 2
+    },
+    {
+      "built_in": "OST_GenericModel",
+      "category": "Generic Models",
+      "count": 91
+    },
+    {
+      "built_in": "OST_StructuralFramingSystem",
+      "category": "Structural Beam Systems",
+      "count": 76
+    }
+  ],
+  "project": {
+    "central_path": "",
+    "name": "Snowdon Towers",
+    "number": "7765328-33-S",
+    "address": "43 Market ST\r\nBrownsville, PA 15417",
+    "client": "Autodesk",
+    "revit_version": "2026",
+    "worksharing": false,
+    "units": {
+      "area": "squareFeet",
+      "length": "feetFractionalInches",
+      "volume": "cubicFeet"
+    }
+  },
+  "levels": [
+    {
+      "name": "L1_43_High",
+      "elevation": {
+        "unit": "m",
+        "value": -1.710239703108418e-15
+      }
+    },
+    {
+      "name": "L2",
+      "elevation": {
+        "unit": "m",
+        "value": 2.463799999999166
+      }
+    },
+    {
+      "name": "L3",
+      "elevation": {
+        "unit": "m",
+        "value": 5.740399999999167
+      }
+    },
+    {
+      "name": "L4",
+      "elevation": {
+        "unit": "m",
+        "value": 9.804399999999168
+      }
+    },
+    {
+      "name": "L5",
+      "elevation": {
+        "unit": "m",
+        "value": 13.86839999999917
+      }
+    },
+    {
+      "name": "R2",
+      "elevation": {
+        "unit": "m",
+        "value": 17.93239999999917
+      }
+    },
+    {
+      "name": "Parking",
+      "elevation": {
+        "unit": "m",
+        "value": -5.156200000000002
+      }
+    },
+    {
+      "name": "Parapet 2",
+      "elevation": {
+        "unit": "m",
+        "value": 21.590000000000472
+      }
+    },
+    {
+      "name": "L2 TOS",
+      "elevation": {
+        "unit": "m",
+        "value": 2.3114
+      }
+    },
+    {
+      "name": "L1_37_Med",
+      "elevation": {
+        "unit": "m",
+        "value": -1.0541000000000014
+      }
+    },
+    {
+      "name": "L1_35_Low",
+      "elevation": {
+        "unit": "m",
+        "value": -1.8034000000002377
+      }
+    },
+    {
+      "name": "M1 TOS",
+      "elevation": {
+        "unit": "m",
+        "value": 1.524
+      }
+    },
+    {
+      "name": "M1",
+      "elevation": {
+        "unit": "m",
+        "value": 1.676400000000094
+      }
+    },
+    {
+      "name": "L3 TOS",
+      "elevation": {
+        "unit": "m",
+        "value": 5.588
+      }
+    },
+    {
+      "name": "Elevator Pit",
+      "elevation": {
+        "unit": "m",
+        "value": -6.985000000000002
+      }
+    },
+    {
+      "name": "R2 TOS",
+      "elevation": {
+        "unit": "m",
+        "value": 17.780000000000005
+      }
+    },
+    {
+      "name": "L5 TOS",
+      "elevation": {
+        "unit": "m",
+        "value": 13.716000000000003
+      }
+    },
+    {
+      "name": "L4 TOS",
+      "elevation": {
+        "unit": "m",
+        "value": 9.652
+      }
+    },
+    {
+      "name": "Top of Footing",
+      "elevation": {
+        "unit": "m",
+        "value": -5.3340000000000005
+      }
+    }
+  ],
+  "links": {
+    "rvt": 0,
+    "ifc": 0,
+    "cad_linked": 0,
+    "cad_imported": 0
+  }
+}

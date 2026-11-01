@@ -53,8 +53,10 @@ def _category_counts(doc):
         category = element.Category
         if category is None or category.CategoryType != CategoryType.Model:
             continue
-        counts[category.Name] = counts.get(category.Name, 0) + 1
-    return [{"category": name, "count": count} for name, count in counts.items()]
+        key = (category.Name, str(category.BuiltInCategory))
+        counts[key] = counts.get(key, 0) + 1
+    return [{"category": key[0], "built_in": key[1], "count": count}
+            for key, count in counts.items()]
 
 
 def _levels(doc):

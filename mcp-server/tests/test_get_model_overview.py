@@ -31,13 +31,38 @@ def test_normalize_ordena_y_totaliza(raw):
     assert out["categories_meta"]["truncated"] is False
 
 
+def test_excluye_categorias_que_no_son_del_modelo(raw):
+    out = normalize(raw)
+    assert "<Sketch>" not in [c["category"] for c in out["categories"]]
+    assert out["excluded_non_model"] == {"elements": 900, "categories": ["<Sketch>"]}
+    assert all("built_in" not in c for c in out["categories"])
+
+
+def test_snowdon_real():
+    fixture = FIXTURE.with_name("overview_snowdon.json")
+    out = normalize(json.loads(fixture.read_text(encoding="utf-8")))
+    names = [c["category"] for c in out["categories"]]
+    assert out["elements_total"] == 1450
+    assert out["excluded_non_model"]["elements"] == 1281
+    assert names[0] == "Structural Framing"
+    assert {"Walls", "Floors", "Structural Columns", "Areas"} <= set(names)
+    assert not {"Materials", "Sheets", "<Sketch>"} & set(names)
+
+
+def test_elevacion_casi_cero_no_queda_negativa(raw):
+    raw["levels"] = [{"name": "N1", "elevation": {"value": -1.7e-15, "unit": "m"}}]
+    value = normalize(raw)["levels"][0]["elevation"]["value"]
+    assert str(value) == "0.0"
+
+
 def test_normalize_traduce_unidades_y_conserva_las_desconocidas(raw):
     units = normalize(raw)["project"]["units"]
     assert units == {"length": "ft-in", "area": "ft2", "volume": "unidadRara"}
 
 
 def test_truncado_avisa_y_conserva_el_total(raw):
-    raw["categories"] = [{"category": f"C{i}", "count": 1} for i in range(CATEGORY_LIMIT + 5)]
+    raw["categories"] = [{"category": f"C{i}", "built_in": f"OST_C{i}", "count": 1}
+                         for i in range(CATEGORY_LIMIT + 5)]
     out = normalize(raw)
     assert len(out["categories"]) == CATEGORY_LIMIT
     assert out["categories_meta"]["truncated"] is True

@@ -3,6 +3,27 @@ from typing import Any
 
 CATEGORY_LIMIT = 60
 
+# Revit las clasifica como CategoryType.Model, pero no son elementos del modelo.
+# Se compara por BuiltInCategory para que funcione con Revit en cualquier idioma.
+NON_MODEL_CATEGORIES = frozenset({
+    "OST_AreaSchemeLines",
+    "OST_Cameras",
+    "OST_CoordinateSystem",
+    "OST_HVAC_Zones",
+    "OST_MEPSpaceSeparationLines",
+    "OST_Materials",
+    "OST_PipeSegments",
+    "OST_PreviewLegendComponents",
+    "OST_ProjectBasePoint",
+    "OST_ProjectInformation",
+    "OST_PropertySet",
+    "OST_SharedBasePoint",
+    "OST_Sheets",
+    "OST_SketchLines",
+    "OST_SunStudy",
+    "OST_TopographyContours",
+})
+
 _UNITS = {
     "meters": "m", "decimeters": "dm", "centimeters": "cm", "millimeters": "mm",
     "feet": "ft", "inches": "in", "feetFractionalInches": "ft-in",
@@ -19,7 +40,12 @@ def normalize(raw: dict[str, Any]) -> dict[str, Any]:
     project = dict(raw["project"])
     project["units"] = {key: _UNITS.get(token, token) for key, token in project["units"].items()}
 
-    categories = sorted(raw["categories"], key=lambda c: (-c["count"], c["category"]))
+    excluded = [c for c in raw["categories"] if c["built_in"] in NON_MODEL_CATEGORIES]
+    categories = sorted(
+        ({"category": c["category"], "count": c["count"]}
+         for c in raw["categories"] if c["built_in"] not in NON_MODEL_CATEGORIES),
+        key=lambda c: (-c["count"], c["category"]),
+    )
     total = len(categories)
     returned = categories[:CATEGORY_LIMIT]
     truncated = total > len(returned)
@@ -27,7 +53,7 @@ def normalize(raw: dict[str, Any]) -> dict[str, Any]:
     levels = sorted(raw["levels"], key=lambda level: level["elevation"]["value"])
     levels = [
         {"name": level["name"],
-         "elevation": {"value": round(level["elevation"]["value"], 3),
+         "elevation": {"value": round(level["elevation"]["value"], 3) + 0.0,
                        "unit": level["elevation"]["unit"]}}
         for level in levels
     ]
@@ -45,6 +71,10 @@ def normalize(raw: dict[str, Any]) -> dict[str, Any]:
         "phases": raw["phases"],
         "worksets": raw["worksets"],
         "elements_total": sum(c["count"] for c in categories),
+        "excluded_non_model": {
+            "elements": sum(c["count"] for c in excluded),
+            "categories": sorted(c["category"] for c in excluded),
+        },
     }
     if "links" in raw:
         result["links"] = raw["links"]

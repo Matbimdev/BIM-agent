@@ -41,7 +41,7 @@ def _type_names(doc, element):
     element_type = doc.GetElement(element.GetTypeId())
     if element_type is None:
         return "", ""
-    return getattr(element_type, "FamilyName", "") or "", element_type.Name
+    return getattr(element_type, "FamilyName", "") or "", serializers.element_name(element_type)
 
 
 def _collect(doc, category):

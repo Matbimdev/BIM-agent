@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Revit -> tipos planos. Unico punto de conversion desde pies internos. IronPython 2.7."""
-from Autodesk.Revit.DB import BuiltInParameter, ElementId
+from Autodesk.Revit.DB import BuiltInParameter, Element, ElementId
 
 FEET_TO_METERS = 0.3048
 _MAGNITUDES = {"length": (FEET_TO_METERS, "m"),
@@ -19,6 +19,14 @@ def unit_token(unit_type_id):
     """'autodesk.unit.unit:squareMeters-1.0.1' -> 'squareMeters'."""
     type_id = unit_type_id.TypeId
     return type_id.split(":")[-1].split("-")[0]
+
+
+def element_name(element):
+    """IronPython no resuelve .Name en tipos como FamilySymbol; se lee desde Element."""
+    try:
+        return Element.Name.GetValue(element) or ""
+    except Exception:
+        return ""
 
 
 def magnitude(parameter):
@@ -50,14 +58,10 @@ def element_ref(doc, element_id):
     element = doc.GetElement(element_id)
     if element is None:
         return None
-    try:
-        name = element.Name
-    except Exception:
-        name = ""
     return {
         "unique_id": element.UniqueId,
         "element_id": element_id.Value,
-        "name": name or "",
+        "name": element_name(element),
         "category": element.Category.Name if element.Category is not None else "",
         "level": level_name(doc, element),
     }

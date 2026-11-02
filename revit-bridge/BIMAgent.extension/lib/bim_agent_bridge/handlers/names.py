@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """Nombres crudos para audit_naming; el regex se evalua en mcp-server. IronPython 2.7."""
+from bim_agent_bridge import serializers
 from Autodesk.Revit.DB import (
     Family,
     FilteredElementCollector,
@@ -29,7 +30,7 @@ def _families(doc):
 def _types(doc):
     for element in FilteredElementCollector(doc).WhereElementIsElementType():
         if element.Category is not None:
-            yield _item(element, element.Name, element.Category.Name)
+            yield _item(element, serializers.element_name(element), element.Category.Name)
 
 
 def _views(doc):

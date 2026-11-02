@@ -32,6 +32,7 @@ def test_vistas_filtra_por_tipo():
 def test_familias_detecta_cada_regla():
     out = audit_families.normalize(DATA["families"])
     assert out["summary"] == {"in_place": 1, "unused": 1, "duplicated": 2, "type_count": 1}
+    assert out["unused_not_evaluated"] == 2
     unused = [d["family"] for d in out["data"] if d["check"] == "unused"]
     assert unused == ["Puerta copia"]
 
@@ -39,6 +40,20 @@ def test_familias_detecta_cada_regla():
 def test_familias_no_confunde_tamanos_con_copias():
     found = audit_families.findings(DATA["families"])
     assert "Viga W 300" not in [f["family"] for f in found["duplicated"]]
+
+
+def test_familias_ignora_referencias_y_nombres_parecidos():
+    families = [{"family": name, "category": cat, "built_in": built_in, "in_place": False, "types": 1,
+                 "instances": 0, "unique_id": name, "element_id": "1"}
+                for name, cat, built_in in [
+                    ("S1", "Rebar Shape", "OST_RebarShape"), ("S2", "Rebar Shape", "OST_RebarShape"),
+                    ("Level Head", "Level Heads", "OST_LevelHeads"),
+                    ("Column Tag", "Column Tags", "OST_StructuralColumnTags"),
+                    ("Column Tag-45", "Column Tags", "OST_StructuralColumnTags"),
+                    ("Door", "Doors", "OST_Doors"), ("Door 2", "Doors", "OST_Doors")]]
+    found = audit_families.findings({"families": families})
+    assert sorted(f["family"] for f in found["unused"]) == ["Column Tag", "Column Tag-45", "Door", "Door 2"]
+    assert sorted(f["family"] for f in found["duplicated"]) == ["Door", "Door 2"]
 
 
 def test_familias_filtra_checks():

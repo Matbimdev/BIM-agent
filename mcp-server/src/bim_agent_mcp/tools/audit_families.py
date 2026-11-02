@@ -11,14 +11,31 @@ RULES = {
     "duplicated": ("FAM-003", "No debe haber familias duplicadas por sufijo de copia o numerico"),
     "type_count": ("FAM-004", "La familia no debe exceder el umbral de tipos"),
 }
-# Los perfiles se usan desde tipos o barridos, no como instancias: no se pueden juzgar por conteo.
-_NOT_COUNTABLE = {"OST_ProfileFamilies"}
-_COPY_SUFFIX = re.compile(r"[\s_-]*(?:(?:copia|copy)[\s_-]*\d{0,2}|\d{1,2})$", re.IGNORECASE)
+# Solo estas categorias se colocan como instancias. Las demas (formas de armadura, cabezas de nivel,
+# perfiles, simbolos) se usan desde tipos o configuraciones, y el conteo no prueba que sobren.
+_PLACED_CATEGORIES = {
+    "OST_Casework", "OST_Columns", "OST_DetailComponents", "OST_Doors", "OST_ElectricalEquipment",
+    "OST_ElectricalFixtures", "OST_Entourage", "OST_Furniture", "OST_FurnitureSystems",
+    "OST_GenericAnnotation", "OST_GenericModel", "OST_LightingFixtures", "OST_MechanicalEquipment",
+    "OST_Parking", "OST_Planting", "OST_PlumbingFixtures", "OST_Site", "OST_SpecialityEquipment",
+    "OST_StructuralColumns", "OST_StructuralFoundation", "OST_StructuralFraming",
+    "OST_StructuralStiffener", "OST_TitleBlocks", "OST_Truss", "OST_Windows",
+}
+# Una palabra de copia, o un solo digito separado. S1, T2 o Tag-45 no indican una copia.
+_COPY_SUFFIX = re.compile(r"(?:[\s_-]*(?:copia|copy)(?:[\s_-]*\d{1,2})?|[\s_]\d)$", re.IGNORECASE)
+_EXCLUDED_FROM_DUPLICATES = {"OST_RebarShape"}
+
+
+def _evaluable(family: dict[str, Any]) -> bool:
+    built_in = family["built_in"]
+    return built_in in _PLACED_CATEGORIES or built_in.endswith("Tags")
 
 
 def _duplicates(families: list[dict[str, Any]]) -> dict[str, str]:
     groups: dict[tuple[str, str], list[dict[str, Any]]] = {}
     for family in families:
+        if family["built_in"] in _EXCLUDED_FROM_DUPLICATES:
+            continue
         base = _COPY_SUFFIX.sub("", family["family"]) or family["family"]
         groups.setdefault((family["category"], base.lower()), []).append(family)
     found = {}
@@ -39,7 +56,7 @@ def findings(raw: dict[str, Any], type_count_threshold: int = 30) -> dict[str, l
                 "unique_id": family["unique_id"], "element_id": int(family["element_id"])}
         if family["in_place"]:
             result["in_place"].append({**base, "check": "in_place", "detail": "Familia in-place"})
-        if family["instances"] == 0 and family["built_in"] not in _NOT_COUNTABLE:
+        if family["instances"] == 0 and _evaluable(family):
             result["unused"].append({**base, "check": "unused", "detail": "Sin instancias colocadas"})
         if family["unique_id"] in duplicates:
             result["duplicated"].append(
@@ -54,7 +71,9 @@ def normalize(raw: dict[str, Any], checks: list[str] | None = None, type_count_t
     found = findings(raw, type_count_threshold)
     selected = [check for check in CHECKS if not checks or check in checks]
     data = [item for check in selected for item in found[check]]
+    not_evaluated = sum(1 for family in raw["families"] if not _evaluable(family))
     return {**envelope(data, limit), "checked": len(raw["families"]),
+            "unused_not_evaluated": not_evaluated,
             "summary": {check: len(found[check]) for check in selected}}
 
 

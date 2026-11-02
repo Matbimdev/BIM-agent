@@ -69,7 +69,7 @@ Entrada:
 ```
 `op` admite `eq`, `neq`, `contains`, `empty`, `not_empty`, `gt`, `lt`. `limit` por defecto 100, maximo 500.
 
-Salida: sobre comun con `data: [{"unique_id", "element_id", "category", "family", "type", "level", "params": {"Width": {"value": 0.9, "unit": "m"}}}]`.
+Salida: sobre comun con `data: [{"unique_id", "element_id", "category", "family", "type", "level", "params": {"Width": {"value": 0.9, "unit": "m"}}}]`. Los parametros que no son longitud, area ni volumen viajan como el texto que muestra Revit.
 Error: `ParameterNotFound` lista los parametros disponibles mas parecidos.
 Endpoint: `/elements`.
 
@@ -83,9 +83,10 @@ Salida:
 ```json
 {"data": [{"group": {"type": "Losa 20cm", "level": "N+3.00"}, "count": 12,
            "quantity": {"value": 412.6, "unit": "m2"}}],
- "total": {"count": 48, "quantity": {"value": 1650.4, "unit": "m2"}},
+ "grand_total": {"count": 48, "quantity": {"value": 1650.4, "unit": "m2"}},
  "criterion": "Parametro de instancia Area (cara superior), fase Nueva construccion"}
 ```
+Regla: `elements_without_value` cuenta los elementos sin la magnitud pedida; no se tratan como cero. Longitud = `INSTANCE_LENGTH_PARAM` o `CURVE_ELEM_LENGTH`; area = `HOST_AREA_COMPUTED`; volumen = `HOST_VOLUME_COMPUTED`.
 Validacion: el total debe coincidir con una tabla de planificacion de Revit del mismo filtro (caso de prueba CP-03).
 Endpoint: `/quantities`.
 
@@ -126,7 +127,7 @@ Proposito: inventario de riesgo de familias. La nomenclatura se audita en `audit
 Entrada: `{"checks": ["in_place", "unused", "duplicated", "type_count"], "type_count_threshold": 30}`.
 
 Salida: sobre comun con `data: [{"check": "unused", "family": "", "category": "", "detail": "", "instances": 0}]` y `summary: {"in_place": 6, "unused": 41, "duplicated": 3, "type_count": 2}`.
-Reglas: in-place permitidas por defecto 0; no usada = familia sin instancias colocadas; duplicada = nombre que difiere solo por sufijo de copia o numerico (`Copia`, `Copy`, `2`); exceso de tipos sobre el umbral. La duplicada es un posible hallazgo que el usuario confirma. Los perfiles no se juzgan como no usados, porque se usan desde tipos y barridos; otra familia usada solo como referencia de tipo sin instancias puede aparecer como no usada.
+Reglas: in-place permitidas por defecto 0; no usada = familia sin instancias colocadas; duplicada = nombre que difiere solo por `Copia`, `Copy` o un digito separado (`Puerta 2`), sin formas de armadura; exceso de tipos sobre el umbral. La duplicada es un posible hallazgo que el usuario confirma. La regla de no usadas solo se evalua en categorias que se colocan como instancias y en etiquetas; las demas (formas de armadura, cabezas de nivel, perfiles, simbolos) se cuentan en `unused_not_evaluated`, sin afirmar que estan en uso. Una familia evaluada que solo se usa como referencia de otro tipo aun puede aparecer como no usada.
 Limitacion declarada: el tamano en disco de una familia no esta disponible en la API sin editarla; se usa el numero de tipos como indicador de peso.
 Endpoint: `/families`.
 
@@ -172,15 +173,16 @@ Salida:
 ```json
 {"base_point": {"ns": {"value": 0, "unit": "m"}, "ew": {"value": 0, "unit": "m"}, "elevation": {"value": 0, "unit": "m"}, "angle_to_true_north": {"value": 0, "unit": "deg"}},
  "survey_point": {"ns": {}, "ew": {}, "elevation": {}},
- "links": [{"name": "EST.rvt", "kind": "rvt", "loaded": true, "pinned": false, "positioning": "shared", "path_found": true}],
+ "links": [{"name": "EST.rvt", "kind": "rvt", "loaded": true, "pinned": false, "positioning": "not_evaluated", "path_found": true}],
  "findings": [{"rule": "link_pinned", "target": "EST.rvt", "detail": "Vinculo sin fijar"}]}
 ```
 Reglas: todo vinculo cargado y encontrado en su ruta; fijado; posicionado por coordenadas compartidas; CAD vinculado y no importado; punto base dentro de la distancia maxima al origen interno (Revit degrada la geometria lejos del origen).
+Limitacion declarada: la API no expone directamente si un vinculo esta posicionado por coordenadas compartidas, asi que `positioning` queda como `not_evaluated` en la v1 y esa regla no se audita.
 Endpoint: `/links_coordinates`.
 
 ## 10. export_report
 
-Proposito: entregar el resultado en el formato que pidieron los tres consultados. Corre completo en `mcp-server`; no llama al bridge.
+Proposito: entregar el resultado en el formato que pidieron los tres consultados. Corre completo en `mcp-server`; no llama al bridge. Exige `get_model_overview` en la sesion (`MissingOverview`).
 
 Entrada: `{"sections": ["warnings", "families", "naming", "parameters", "links", "sheets_views"], "format": "xlsx", "path": null}`. Usa los resultados cacheados de la sesion.
 

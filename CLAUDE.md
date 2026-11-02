@@ -117,4 +117,4 @@ Roadmap en `docs/04-roadmap.md`. Herramientas implementadas: `get_model_overview
 `get_sheets_and_views`, `audit_families`, `audit_naming`, `audit_parameters` y `export_report`.
 Validadas contra Revit 2026: `get_model_overview`, `get_warnings` y `export_report`.
 Revit 2027 sin validar: el servidor de Routes no respondio, causa sin diagnosticar.
-Pendientes: `audit_links_coordinates`, `query_elements`, `get_quantities` y panel pyRevit.
+Las 10 herramientas estan escritas. Falta validar contra Revit `audit_links_coordinates`, `query_elements`, `get_quantities` y la correccion de `audit_families`. Pendiente: panel pyRevit.

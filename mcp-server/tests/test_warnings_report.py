@@ -92,10 +92,19 @@ def test_reporte_excel(tmp_path, session):
 
 def test_reporte_sin_auditorias_no_inventa():
     current = Session()
-    current.record("get_model_overview", {}, {"document": "x"})
+    overview = load("overview_sintetico.json")
+    overview["document"] = "x"
+    current.record("get_model_overview", {}, overview)
     with pytest.raises(RevitError) as exc:
         build(current)
     assert exc.value.error_type == "NoAuditData"
+
+
+def test_reporte_exige_radiografia(session):
+    del session.results["get_model_overview"]
+    with pytest.raises(RevitError) as exc:
+        build(session)
+    assert exc.value.error_type == "MissingOverview"
 
 
 def test_seccion_invalida(session):

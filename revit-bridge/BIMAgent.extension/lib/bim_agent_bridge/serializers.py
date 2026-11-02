@@ -1,6 +1,14 @@
 # -*- coding: utf-8 -*-
 """Revit -> tipos planos. Unico punto de conversion desde pies internos. IronPython 2.7."""
+from Autodesk.Revit.DB import BuiltInParameter, ElementId
+
 FEET_TO_METERS = 0.3048
+_MAGNITUDES = {"length": (FEET_TO_METERS, "m"),
+               "area": (FEET_TO_METERS ** 2, "m2"),
+               "volume": (FEET_TO_METERS ** 3, "m3")}
+_LEVEL_PARAMETERS = (BuiltInParameter.INSTANCE_REFERENCE_LEVEL_PARAM,
+                     BuiltInParameter.FAMILY_BASE_LEVEL_PARAM,
+                     BuiltInParameter.WALL_BASE_CONSTRAINT)
 
 
 def length_m(feet):
@@ -13,16 +21,35 @@ def unit_token(unit_type_id):
     return type_id.split(":")[-1].split("-")[0]
 
 
+def magnitude(parameter):
+    """Longitud, area o volumen en SI; None para cualquier otro tipo de dato."""
+    token = parameter.Definition.GetDataType().TypeId.split(":")[-1].split("-")[0]
+    if token not in _MAGNITUDES or not parameter.HasValue:
+        return None
+    factor, unit = _MAGNITUDES[token]
+    return {"value": parameter.AsDouble() * factor, "unit": unit}
+
+
+def level_name(doc, element):
+    level_id = getattr(element, "LevelId", None)
+    if level_id is not None and level_id != ElementId.InvalidElementId:
+        level = doc.GetElement(level_id)
+        if level is not None:
+            return level.Name
+    for built_in in _LEVEL_PARAMETERS:
+        parameter = element.get_Parameter(built_in)
+        if parameter is not None and parameter.HasValue:
+            level = doc.GetElement(parameter.AsElementId())
+            if level is not None:
+                return level.Name
+    return ""
+
+
 def element_ref(doc, element_id):
     """Referencia plana de un elemento, o None si ya no existe en el documento."""
     element = doc.GetElement(element_id)
     if element is None:
         return None
-    level = None
-    level_id = getattr(element, "LevelId", None)
-    if level_id is not None:
-        level_element = doc.GetElement(level_id)
-        level = level_element.Name if level_element is not None else None
     try:
         name = element.Name
     except Exception:
@@ -32,5 +59,5 @@ def element_ref(doc, element_id):
         "element_id": element_id.Value,
         "name": name or "",
         "category": element.Category.Name if element.Category is not None else "",
-        "level": level or "",
+        "level": level_name(doc, element),
     }

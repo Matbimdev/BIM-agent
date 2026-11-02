@@ -12,7 +12,7 @@ from openpyxl.worksheet.worksheet import Worksheet
 from .. import config
 from ..revit_client import RevitError
 from ..session import Session
-from . import audit_families, get_sheets_and_views
+from . import audit_families, audit_links_coordinates, get_sheets_and_views
 from .get_model_overview import normalize
 from .get_warnings import group, per_thousand
 
@@ -47,6 +47,9 @@ def _measurements(session: Session) -> dict[str, float]:
     views = session.results.get("get_sheets_and_views")
     if views:
         found["vistas_no_colocadas"] = len(get_sheets_and_views.unplaced(views))
+    links = session.results.get("audit_links_coordinates")
+    if links:
+        found["hallazgos_vinculos"] = len(audit_links_coordinates.findings(links))
     return found
 
 
@@ -129,6 +132,9 @@ def build(session: Session, sections: list[str] | None = None, path: str | None 
     if unknown:
         raise RevitError("InvalidSection", f"Secciones no validas: {', '.join(unknown)}.",
                          f"Usa solo: {', '.join(SECTION_SOURCES)}.")
+    if "get_model_overview" not in session.results:
+        raise RevitError("MissingOverview", "El reporte necesita los datos del proyecto.",
+                         "Ejecuta get_model_overview y repite export_report.")
     included = [s for s in requested if SECTION_SOURCES[s] in session.results]
     missing = [s for s in requested if s not in included]
     if not included:
@@ -165,6 +171,8 @@ def build(session: Session, sections: list[str] | None = None, path: str | None 
         _rule_sheet(book, "Familias", audit_families.rows(session.results["audit_families"]))
     if "sheets_views" in included:
         _rule_sheet(book, "Vistas no colocadas", get_sheets_and_views.rows(session.results["get_sheets_and_views"]))
+    if "links" in included:
+        _rule_sheet(book, "Vinculos", audit_links_coordinates.rows(session.results["audit_links_coordinates"]))
     counters: dict[str, int] = {}
     for sheet in session.rule_sheets.values():
         counters[sheet["prefix"]] = counters.get(sheet["prefix"], 0) + 1

@@ -6,6 +6,9 @@ from mcp.server.fastmcp import FastMCP
 from .revit_client import RevitClient, RevitError
 from .session import Session
 from .tools import audit_families as families
+from .tools import audit_links_coordinates as links
+from .tools import get_quantities as quantities
+from .tools import query_elements as queries
 from .tools import audit_naming as naming
 from .tools import audit_parameters as parameters
 from .tools import export_report as report
@@ -122,10 +125,55 @@ def audit_parameters(category: str, required: list[str] | None = None, rules: li
 
 
 @mcp.tool()
+def audit_links_coordinates(include_cad: bool = True, max_distance_km: float = 10) -> dict[str, Any]:
+    """Diagnostica puntos base, vinculos RVT e IFC y CAD: carga, fijacion, CAD importado y distancia
+    al origen interno. No evalua coordenadas compartidas. Solo lectura."""
+    try:
+        args = {"include_cad": include_cad, "max_distance_km": max_distance_km}
+        raw = client.post("links_coordinates")
+        session.record("audit_links_coordinates", args, raw)
+        return links.normalize(raw, include_cad, max_distance_km)
+    except RevitError as err:
+        return err.to_dict()
+
+
+@mcp.tool()
+def query_elements(category: str, level: str | None = None, type_name: str | None = None,
+                   filters: list[dict[str, Any]] | None = None, fields: list[str] | None = None,
+                   include_type_params: bool = True, limit: int = 100) -> dict[str, Any]:
+    """Busca elementos de una categoria y lee sus parametros. filters admite {"param", "op", "value"},
+    con op eq, neq, contains, empty, not_empty, gt o lt. limit maximo 500. Solo lectura."""
+    try:
+        filters, fields = filters or [], fields or []
+        queries.validate(filters)
+        wanted = queries.requested(filters, fields)
+        raw = client.post("elements", {"category": category, "fields": wanted})
+        session.record("query_elements", {"category": category, "level": level, "fields": fields}, raw)
+        return queries.normalize(raw, level, type_name, filters, fields, include_type_params, limit)
+    except RevitError as err:
+        return err.to_dict()
+
+
+@mcp.tool()
+def get_quantities(category: str, group_by: list[str] | None = None, metric: str | None = None,
+                   limit: int | None = None) -> dict[str, Any]:
+    """Metrado agregado por type, level o phase (maximo 2). metric: count, length, area o volume; si
+    se omite usa la natural de la categoria. Usa estos totales sin recalcularlos. Solo lectura."""
+    try:
+        group_by = group_by or []
+        quantities.validate(group_by, metric)
+        raw = client.post("quantities", {"category": category})
+        session.record("get_quantities", {"category": category, "group_by": group_by, "metric": metric}, raw)
+        return quantities.normalize(raw, group_by, metric, limit)
+    except RevitError as err:
+        return err.to_dict()
+
+
+@mcp.tool()
 def export_report(sections: list[str] | None = None, path: str | None = None) -> dict[str, Any]:
     """Genera el Excel de auditoria con las herramientas ya ejecutadas en la sesion y calcula el
-    score de salud. Secciones: warnings, families, naming, parameters, links, sheets_views. No
-    consulta Revit; declara las secciones y componentes sin datos."""
+    score de salud. Secciones: warnings, families, naming, parameters, links, sheets_views. Ejecuta
+    antes get_model_overview y las auditorias pedidas. No consulta Revit; declara lo que falta."""
     try:
         return report.build(session, sections, path)
     except RevitError as err:

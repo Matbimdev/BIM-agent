@@ -24,8 +24,9 @@ def handle(request, uiapp, handler):
     try:
         doc = _active_document(uiapp)
         args = request.data.get("args") or {}
-        return routes.make_response(
-            data=handler(doc, uiapp.Application.VersionNumber, args))
+        result = handler(doc, uiapp.Application.VersionNumber, args)
+        result["document"] = doc.Title
+        return routes.make_response(data=result)
     except errors.BridgeError as err:
         return routes.make_response(data=err.to_dict(), status=err.status)
     except Exception as err:

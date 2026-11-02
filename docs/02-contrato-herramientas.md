@@ -111,11 +111,12 @@ Entrada: `{"severity": null, "top": 20, "sample_per_group": 5}`.
 
 Salida:
 ```json
-{"total": 812,
+{"total": 812, "groups_total": 37, "returned": 20, "truncated": true, "hint": "",
+ "warnings_por_1000_elementos": 44.0,
  "data": [{"description": "Highlighted walls overlap...", "severity": "Warning", "count": 214,
            "sample_elements": ["<unique_id>"]}]}
 ```
-Regla: agrupar por texto de descripcion y severidad; indicador derivado `warnings_por_1000_elementos` para el score.
+Regla: agrupar por texto de descripcion y severidad; `total` cuenta los warnings filtrados y `warnings_por_1000_elementos` usa todos los warnings del modelo. El bridge entrega la lista completa y `mcp-server` filtra, agrupa y trunca; el reporte siempre usa la lista completa.
 Endpoint: `/warnings`.
 
 ## 6. audit_families
@@ -184,5 +185,5 @@ Proposito: entregar el resultado en el formato que pidieron los tres consultados
 Entrada: `{"sections": ["warnings", "families", "naming", "parameters", "links", "sheets_views"], "format": "xlsx", "path": null}`. Usa los resultados cacheados de la sesion.
 
 Salida: `{"path": "C:/.../BIMAgent_Auditoria_<modelo>_<fecha>.xlsx", "sheets": ["Resumen", "Warnings", "..."], "health_score": {"value": 72, "max": 100, "components": [{"name": "warnings_por_1000", "value": 44, "weight": 0.25, "points": 15}]}}`.
-Estructura del Excel: hoja `Resumen` (modelo, fecha, score y sus componentes, reglas aplicadas); una hoja por regla con columnas `Regla`, `Texto de la regla`, `UniqueId`, `ElementId`, `Elemento`, `Valor encontrado`, `Valor esperado`; hoja `Trazabilidad` con cada llamada (herramienta, argumentos, hora).
-Score de salud: heuristica con pesos declarados en `config.py` (warnings por 1000 elementos, familias in-place, familias no usadas, vistas no colocadas, CAD importados, hallazgos de vinculos). Reemplaza a `audit_model_health` del Hito 1.
+Estructura del Excel: hoja `Resumen` (modelo, fecha, score y sus componentes, reglas aplicadas); una hoja por regla con columnas `Regla`, `Texto de la regla`, `UniqueId`, `ElementId`, `Elemento`, `Categoria`, `Nivel`, `Valor encontrado`, `Valor esperado`; hoja `Trazabilidad` con cada llamada (herramienta, argumentos, hora).
+Score de salud: heuristica con pesos declarados en `config.py` (warnings por 1000 elementos, familias in-place, familias no usadas, vistas no colocadas, CAD importados, hallazgos de vinculos). Reemplaza a `audit_model_health` del Hito 1. Si faltan datos de algun componente, el score se calcula con los disponibles, se reparte el peso entre ellos y la salida lo declara con `complete: false` y `missing_components`. Las secciones sin datos en la sesion se devuelven en `sections_missing`; nunca se inventan.

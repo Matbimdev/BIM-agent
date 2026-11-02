@@ -1,0 +1,11 @@
+{
+  "document": "Proyecto de prueba",
+  "warnings": [
+    {"description": "Muros superpuestos", "severity": "Warning",
+     "elements": [{"unique_id": "u1", "element_id": 1, "name": "=Muro", "category": "Walls", "level": "N1"},
+                  {"unique_id": "u2", "element_id": 2, "name": "Muro B", "category": "Walls", "level": "N1"}]},
+    {"description": "Muros superpuestos", "severity": "Warning",
+     "elements": [{"unique_id": "u1", "element_id": 1, "name": "=Muro", "category": "Walls", "level": "N1"}]},
+    {"description": "Elemento sin referencia", "severity": "Error", "elements": []}
+  ]
+}

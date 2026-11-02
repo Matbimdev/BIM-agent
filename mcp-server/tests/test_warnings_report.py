@@ -32,7 +32,9 @@ def test_agrupa_ordena_y_calcula_densidad():
     assert out["total"] == 3
     assert out["data"][0]["description"] == "Muros superpuestos"
     assert out["data"][0]["count"] == 2
-    assert out["data"][0]["sample_elements"] == ["u1", "u2"]
+    assert [e["unique_id"] for e in out["data"][0]["sample_elements"]] == ["u1", "u2"]
+    assert out["data"][0]["sample_elements"][0] == {
+        "unique_id": "u1", "element_id": 1, "name": "=Muro", "category": "Walls", "level": "N1"}
     assert out["warnings_por_1000_elementos"] == 57.7
 
 

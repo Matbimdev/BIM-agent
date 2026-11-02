@@ -14,6 +14,15 @@ def group(warnings: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return sorted(groups.values(), key=lambda g: (-g["count"], g["description"]))
 
 
+def _samples(elements: list[dict[str, Any]], limit: int) -> list[dict[str, Any]]:
+    """Muestra sin repetidos: unique_id para otras llamadas, element_id para Select by ID en Revit."""
+    unique = {element["unique_id"]: element for element in elements}
+    return [
+        {key: element[key] for key in ("unique_id", "element_id", "name", "category", "level")}
+        for element in unique.values()
+    ][:limit]
+
+
 def per_thousand(warning_count: int, elements_total: int) -> float | None:
     return round(warning_count * 1000 / elements_total, 1) if elements_total else None
 
@@ -38,7 +47,7 @@ def normalize(raw: dict[str, Any], elements_total: int, severity: str | None = N
         "warnings_por_1000_elementos": per_thousand(len(warnings), elements_total),
         "data": [
             {"description": g["description"], "severity": g["severity"], "count": g["count"],
-             "sample_elements": list(dict.fromkeys(e["unique_id"] for e in g["elements"]))[:sample_per_group]}
+             "sample_elements": _samples(g["elements"], sample_per_group)}
             for g in returned
         ],
     }

@@ -12,7 +12,7 @@ Sobre de respuesta de toda herramienta que devuelve listas:
 ```
 
 Magnitudes siempre como `{"value": 12.5, "unit": "m2"}`. Conversion desde pies internos una sola vez, en `serializers.py`.
-Elementos referenciados por `unique_id` (estable entre llamadas); `element_id` solo para mostrar al usuario.
+Elementos referenciados por `unique_id` (estable entre llamadas); `element_id` para mostrar al usuario y usar en Select by ID. Toda muestra de elementos incluye `unique_id`, `element_id`, `name`, `category` y `level`; al responder, el agente muestra primero el `element_id`.
 Errores tipados, nunca stack trace: `NoDocument`, `BridgeUnavailable`, `Unauthorized`, `InternalError`, `CategoryNotFound`, `ParameterNotFound`, `InvalidRegex`, `Timeout`. Cada error trae `message` y `action` (que hacer).
 Bridge: `POST http://localhost:48884/bim-agent/<endpoint>` con cuerpo `{"token": "...", "args": {...}}` (ADR-006). Solo lectura, sin `Transaction`.
 
@@ -114,7 +114,7 @@ Salida:
 {"total": 812, "groups_total": 37, "returned": 20, "truncated": true, "hint": "",
  "warnings_por_1000_elementos": 44.0,
  "data": [{"description": "Highlighted walls overlap...", "severity": "Warning", "count": 214,
-           "sample_elements": ["<unique_id>"]}]}
+           "sample_elements": [{"unique_id": "", "element_id": 602358, "name": "", "category": "Walls", "level": "L1"}]}]}
 ```
 Regla: agrupar por texto de descripcion y severidad; `total` cuenta los warnings filtrados y `warnings_por_1000_elementos` usa todos los warnings del modelo. El bridge entrega la lista completa y `mcp-server` filtra, agrupa y trunca; el reporte siempre usa la lista completa.
 Endpoint: `/warnings`.

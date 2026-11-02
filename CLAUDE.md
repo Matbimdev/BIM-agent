@@ -113,19 +113,8 @@ antes de darla por cerrada.
 
 ## 6. Estado
 
-Fase 0 cerrada: contratos escritos (2026-10-18). Fase 1 en curso. Fechas: Hito 2 20/10/2026, Hito 3 12/11/2026.
-
-### Estado al 2026-11-01
-
-- Repositorio Git local, privado por decision del autor. Licencia propietaria en `LICENSE`. `.gitignore` excluye encuesta, anexos, entregables y modelos.
-- Roadmap reordenado en `docs/04-roadmap.md`.
-- F1 cerrada (2026-11-01): `get_model_overview` probada de extremo a extremo por MCP contra Revit 2026 con Snowdon: 1.450 elementos de modelo, 1.281 excluidos. Revit 2027 sin validar: el servidor de Routes no respondio, causa sin diagnosticar.
-- Siguiente: `get_warnings` y `export_report` basico.
-
-### Pendientes al 2026-10-18 (historico)
-
-- Hito 2 (vence 20/10 23:59): integrar encuesta ampliada (marcador [PENDIENTE] en Tabla 1 de `docs/08-hito02-plan.md`, sin pasar de 12 paginas), regenerar PDF con `scripts/build.sh`, subir PDF y link a Classroom. Prototipo ya publico (v6, 2026-10-18): las 10 tools en el recorrido, reglas en lenguaje claro.
-- F1 vertical slice: `BIMAgent.extension` con `/health` y `/overview`, `mcp-server` con `get_model_overview`. Modelo de prueba: Snowdon Towers Sample Structural.
-- ADR-006 aceptado (2026-10-18): endpoints POST, token en el cuerpo JSON, API `bim-agent`. `/health` probado en Revit 2026 con Snowdon (200 con token, 401 sin token) el 2026-10-18. Correr con `scripts/2_smoke.bat`.
-- Laboratorio aparte (no es el proyecto): extension de referencia mcp-server-for-revit-python en %APPDATA%\pyRevit\Extensions, funcionando. Requiere parche local en pyRevit-Master `routes/server/server.py` (original en server.py.orig) para reenviar cabeceras; se pierde si se actualiza pyRevit.
-- Leccion del laboratorio: con herramientas atomicas el agente recurre a ejecutar codigo; parametros se resuelven en cascada instancia -> tipo.
+Roadmap en `docs/04-roadmap.md`. Herramientas implementadas: `get_model_overview`, `get_warnings`,
+`get_sheets_and_views`, `audit_families`, `audit_naming`, `audit_parameters` y `export_report`.
+Validadas contra Revit 2026: `get_model_overview`, `get_warnings` y `export_report`.
+Revit 2027 sin validar: el servidor de Routes no respondio, causa sin diagnosticar.
+Pendientes: `audit_links_coordinates`, `query_elements`, `get_quantities` y panel pyRevit.

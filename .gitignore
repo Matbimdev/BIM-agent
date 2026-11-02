@@ -1,4 +1,14 @@
-# Datos personales y material del diplomado: nunca al repositorio
+# Documentos academicos y material que no pertenece al producto
+docs/05-*
+docs/06-*
+docs/07-*
+docs/08-*
+AGENTS.md
+scripts/build.sh
+scripts/st.css
+*.bundle
+
+# Datos personales y material externo: nunca al repositorio
 entregables/
 rubricas/
 talleres/

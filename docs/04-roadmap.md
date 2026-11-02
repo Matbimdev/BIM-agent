@@ -1,6 +1,5 @@
 # Roadmap
 
-Fechas oficiales: Hito 2 20/10/2026, Hito 3 12/11/2026. Detalle en `08-hito02-plan.md`, seccion 8.
 
 ## Fase 0 - Fundacion (cerrada 18/10)
 - [x] Estructura de carpetas y CLAUDE.md
@@ -29,7 +28,7 @@ Fechas oficiales: Hito 2 20/10/2026, Hito 3 12/11/2026. Detalle en `08-hito02-pl
 - Salida: CA-01 a CA-06 medidos
 
 ## F6 - Entrega (11 y 12/11)
-- [ ] PPT final, ficha tecnica, instalacion por un tercero
+- [ ] Ficha tecnica e instalacion por un tercero
 
 MVP indispensable: herramientas 1, 4, 5, 6, 7, 8 y 10.
 Reordenado el 2026-11-01: el flujo de extremo a extremo se cierra antes que la cobertura.

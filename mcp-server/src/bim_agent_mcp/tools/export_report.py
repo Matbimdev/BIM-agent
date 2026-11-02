@@ -12,6 +12,7 @@ from openpyxl.worksheet.worksheet import Worksheet
 from .. import config
 from ..revit_client import RevitError
 from ..session import Session
+from . import audit_families, get_sheets_and_views
 from .get_model_overview import normalize
 from .get_warnings import group, per_thousand
 
@@ -38,6 +39,14 @@ def _measurements(session: Session) -> dict[str, float]:
         rate = per_thousand(len(warnings["warnings"]), _elements_total(overview))
         if rate is not None:
             found["warnings_por_1000"] = rate
+    families = session.results.get("audit_families")
+    if families:
+        result = audit_families.findings(families)
+        found["familias_in_place"] = len(result["in_place"])
+        found["familias_no_usadas"] = len(result["unused"])
+    views = session.results.get("get_sheets_and_views")
+    if views:
+        found["vistas_no_colocadas"] = len(get_sheets_and_views.unplaced(views))
     return found
 
 
@@ -80,6 +89,14 @@ def _header(sheet: Worksheet, values: list[Any]) -> None:
     _append(sheet, values)
     for cell in sheet[sheet.max_row]:
         cell.font = Font(bold=True)
+
+
+def _rule_sheet(book: Workbook, title: str, rows: list[list[Any]]) -> None:
+    sheet = book.create_sheet(title)
+    _header(sheet, RULE_COLUMNS)
+    sheet.freeze_panes = "A2"
+    for row in rows:
+        _append(sheet, row)
 
 
 def _warnings_sheet(book: Workbook, raw: dict[str, Any]) -> int:
@@ -144,6 +161,16 @@ def build(session: Session, sections: list[str] | None = None, path: str | None 
 
     if "warnings" in included:
         _warnings_sheet(book, session.results["get_warnings"])
+    if "families" in included:
+        _rule_sheet(book, "Familias", audit_families.rows(session.results["audit_families"]))
+    if "sheets_views" in included:
+        _rule_sheet(book, "Vistas no colocadas", get_sheets_and_views.rows(session.results["get_sheets_and_views"]))
+    counters: dict[str, int] = {}
+    for sheet in session.rule_sheets.values():
+        counters[sheet["prefix"]] = counters.get(sheet["prefix"], 0) + 1
+        section = "naming" if sheet["prefix"] == "Nombres" else "parameters"
+        if section in included:
+            _rule_sheet(book, f"{sheet['prefix']} {counters[sheet['prefix']]}", sheet["rows"])
 
     trace = book.create_sheet("Trazabilidad")
     _header(trace, ["Herramienta", "Argumentos", "Hora"])

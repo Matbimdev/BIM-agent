@@ -16,3 +16,7 @@ HEALTH_COMPONENTS = {
     "cad_importados": {"weight": 0.15, "limit": 10},
     "hallazgos_vinculos": {"weight": 0.15, "limit": 5},
 }
+
+# Vistas que no exigen plano: prefijo de trabajo y vistas creadas por Revit, como {3D}.
+WORKING_VIEW_PATTERN = r"^(WIP|TRABAJO|\{)"
+RESULT_LIMIT = 200

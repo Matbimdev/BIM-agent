@@ -100,7 +100,7 @@ Salida:
 {"sheets": {"total": 42, "data": [{"number": "A-101", "name": "Planta N+0.00", "views_placed": 3, "current_revision": "R02"}]},
  "unplaced_views": {"total": 27, "data": [{"name": "Corte 5", "view_type": "Section", "unique_id": ""}]}}
 ```
-Regla: toda vista de trabajo debe estar colocada en un plano. Se excluyen plantillas, vistas de sistema y vistas cuyo nombre cumple el patron de trabajo configurado (por defecto prefijo `WIP` o `TRABAJO`).
+Regla: toda vista de trabajo debe estar colocada en un plano. Se excluyen plantillas, vistas de sistema, vistas creadas por Revit (nombre entre llaves, como `{3D}`) y vistas cuyo nombre cumple el patron de trabajo configurado (por defecto prefijo `WIP` o `TRABAJO`).
 Endpoint: `/sheets_views`.
 
 ## 5. get_warnings
@@ -126,7 +126,7 @@ Proposito: inventario de riesgo de familias. La nomenclatura se audita en `audit
 Entrada: `{"checks": ["in_place", "unused", "duplicated", "type_count"], "type_count_threshold": 30}`.
 
 Salida: sobre comun con `data: [{"check": "unused", "family": "", "category": "", "detail": "", "instances": 0}]` y `summary: {"in_place": 6, "unused": 41, "duplicated": 3, "type_count": 2}`.
-Reglas: in-place permitidas por defecto 0; no usada = familia sin instancias colocadas; duplicada = nombre que difiere solo por sufijo de copia o numerico (`Copia`, `Copy`, `2`); exceso de tipos sobre el umbral.
+Reglas: in-place permitidas por defecto 0; no usada = familia sin instancias colocadas; duplicada = nombre que difiere solo por sufijo de copia o numerico (`Copia`, `Copy`, `2`); exceso de tipos sobre el umbral. La duplicada es un posible hallazgo que el usuario confirma. Los perfiles no se juzgan como no usados, porque se usan desde tipos y barridos; otra familia usada solo como referencia de tipo sin instancias puede aparecer como no usada.
 Limitacion declarada: el tamano en disco de una familia no esta disponible en la API sin editarla; se usa el numero de tipos como indicador de peso.
 Endpoint: `/families`.
 
@@ -140,7 +140,7 @@ Entrada:
  "rule_text": "Vistas: disciplina, tipo y correlativo de tres digitos (BEP 4.2)",
  "category": null}
 ```
-`target` admite `families`, `types`, `views`, `sheets`, `levels`.
+`target` admite `families`, `types`, `views`, `sheets`, `sheet_numbers`, `levels`.
 
 Salida: `{"pattern_used": "", "rule_text": "", "checked": 320, "compliant": 287, "data": [{"name": "Planta 1 copia", "target": "views", "unique_id": ""}]}`.
 Control: `mcp-server` compila el patron antes de llamar al bridge (`InvalidRegex` si falla) y el agente muestra el patron al usuario para confirmarlo antes de ejecutar.

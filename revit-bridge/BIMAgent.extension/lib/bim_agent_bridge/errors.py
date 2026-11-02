@@ -21,3 +21,8 @@ class BridgeError(Exception):
 class NoDocument(BridgeError):
     status = 409
     error_type = "NoDocument"
+
+
+class CategoryNotFound(BridgeError):
+    status = 404
+    error_type = "CategoryNotFound"

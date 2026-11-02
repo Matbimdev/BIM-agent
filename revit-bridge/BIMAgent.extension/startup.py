@@ -3,7 +3,7 @@
 from pyrevit import routes
 from bim_agent_bridge import auth
 from bim_agent_bridge import routes as bridge_routes
-from bim_agent_bridge.handlers import overview, warnings
+from bim_agent_bridge.handlers import elements, families, names, overview, sheets_views, warnings
 
 api = routes.API("bim-agent")
 auth.get_or_create_token()
@@ -30,3 +30,23 @@ def overview_route(request, uiapp):
 @api.route("/warnings", methods=["POST"])
 def warnings_route(request, uiapp):
     return bridge_routes.handle(request, uiapp, warnings.run)
+
+
+@api.route("/sheets_views", methods=["POST"])
+def sheets_views_route(request, uiapp):
+    return bridge_routes.handle(request, uiapp, sheets_views.run)
+
+
+@api.route("/families", methods=["POST"])
+def families_route(request, uiapp):
+    return bridge_routes.handle(request, uiapp, families.run)
+
+
+@api.route("/names", methods=["POST"])
+def names_route(request, uiapp):
+    return bridge_routes.handle(request, uiapp, names.run)
+
+
+@api.route("/elements", methods=["POST"])
+def elements_route(request, uiapp):
+    return bridge_routes.handle(request, uiapp, elements.run)

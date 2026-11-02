@@ -10,7 +10,8 @@ def group(warnings: list[dict[str, Any]]) -> list[dict[str, Any]]:
         entry = groups.setdefault(
             key, {"description": key[0], "severity": key[1], "count": 0, "elements": []})
         entry["count"] += 1
-        entry["elements"].extend(warning["elements"])
+        # pyRevit serializa el ElementId (Int64) como texto.
+        entry["elements"].extend({**e, "element_id": int(e["element_id"])} for e in warning["elements"])
     return sorted(groups.values(), key=lambda g: (-g["count"], g["description"]))
 
 

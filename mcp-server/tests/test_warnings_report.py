@@ -38,6 +38,12 @@ def test_agrupa_ordena_y_calcula_densidad():
     assert out["warnings_por_1000_elementos"] == 57.7
 
 
+def test_element_id_en_texto_se_convierte_a_numero():
+    raw = {"warnings": [{"description": "d", "severity": "Warning", "elements": [
+        {"unique_id": "u", "element_id": "602358", "name": "n", "category": "c", "level": "l"}]}]}
+    assert normalize(raw, 1)["data"][0]["sample_elements"][0]["element_id"] == 602358
+
+
 def test_filtro_no_cambia_la_densidad_del_modelo():
     out = normalize(load("warnings_sintetico.json"), 52, severity="error")
     assert out["total"] == 1

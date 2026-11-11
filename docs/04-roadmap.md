@@ -17,7 +17,15 @@ Entrega del MVP: 17/11/2026. Actualizado el 2026-11-11.
 - [ ] Contrastar el metrado de Floors con una tabla de planificacion de Revit (CA-04, diferencia menor a 0,5%)
 - [ ] Contrastar 2 o 3 familias no usadas con `Select All Instances`
 - [ ] Probar vinculos con un vinculo sin fijar y un CAD importado en una copia del modelo
-- [ ] Panel pyRevit minimo: iniciar y detener el servidor, estado, seleccionar hallazgo por UniqueId
+- [x] Panel pyRevit minimo, probado en Revit 2027 el 11/11: `BIMAgent.tab/Auditoria.panel`
+      con `Iniciar/Detener` (alterna el bridge), `Estado` (bridge, puerto, modelo y version)
+      y `Seleccionar` (selecciona por UniqueId pegado desde el reporte). Pantalla P1 del
+      Hito 2; cierra los pasos 1 y 9 del flujo de usuario y hace medible CA-03.
+      Dos decisiones de implementacion: el panel no usa `pyrevit.forms`, que bajo CPython
+      (Revit 2027) lanza `PyRevitCPythonNotSupported` en todos sus atributos, sino
+      `TaskDialog` de la API de Revit; y `Estado` no llama a `/health` por HTTP, porque
+      Routes despacha al hilo principal y el boton se bloquearia esperando su propia
+      respuesta. 19 tests nuevos del parseo de UniqueId, 82 en total
 - [ ] Revisar pesos y limites del score en `config.py`
 - [ ] Decidir el ruido de vistas no colocadas (tablas, 3D, planos de area) y de etiquetas sin uso
 

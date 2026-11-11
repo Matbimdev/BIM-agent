@@ -14,7 +14,13 @@ Entrega del MVP: 17/11/2026. Actualizado el 2026-11-11.
 - [x] Revit 2027 validado el 11/11: las 10 herramientas responden con Snowdon (1.450 elementos, metrado de Floors 6.513,544 m2, igual que en 2026; score 71). La falla anterior era de puerto: con Revit 2026 abierto primero, pyRevit asigna 48885 a 2027 y el MCP solo busca 48884
 - [x] Robustez: si 48884 no responde o no tiene modelo, `revit_client.py` prueba `/health` en 48884 a 48890 y reintenta en el que tenga documento abierto (6 tests nuevos, 63 en total)
 - [ ] Revisar por que 2027 da 56 vistas no colocadas y 2026 daba 55
-- [ ] Contrastar el metrado de Floors con una tabla de planificacion de Revit (CA-04, diferencia menor a 0,5%)
+- [x] CA-04 cumple. Metrado de Floors contrastado el 11/11 contra una tabla de
+      planificacion de Revit 2027 (campos Type, Area y Count, sin filtro de fase,
+      Itemize every instance desmarcado): 27 losas y 70.111,21 ft2 en los dos lados,
+      con los cinco tipos coincidiendo uno a uno. Diferencia maxima 0,0005%, contra el
+      0,5% que exige el criterio, y proviene de reconvertir a ft2 un valor que el MCP
+      ya redondeo a tres decimales en m2. Evidencia en
+      `samples/payloads/quantities_floors_snowdon.json`
 - [ ] Contrastar 2 o 3 familias no usadas con `Select All Instances`
 - [ ] Probar vinculos con un vinculo sin fijar y un CAD importado en una copia del modelo
 - [x] Panel pyRevit minimo, probado en Revit 2027 el 11/11: `BIMAgent.tab/Auditoria.panel`

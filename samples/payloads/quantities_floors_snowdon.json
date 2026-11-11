@@ -1,0 +1,284 @@
+{
+  "_evidencia": {
+    "descripcion": "Metrado de Floors de Snowdon Towers Sample Structural, leido por get_quantities. Respaldo de CA-04.",
+    "modelo": "Snowdon Towers Sample Structural",
+    "revit": "2027",
+    "fecha": "2026-11-11",
+    "nota": "Las unidades del proyecto son ft2; el MCP convierte a m2 una sola vez, en el serializador. Total equivalente: 70111,20 ft2."
+  },
+  "por_tipo": {
+    "data": [
+      {
+        "group": {
+          "type": "1 1/2 Metal Roof Deck NO Concrete"
+        },
+        "count": 5,
+        "quantity": {
+          "value": 67.32,
+          "unit": "m2"
+        },
+        "elements_without_value": 0
+      },
+      {
+        "group": {
+          "type": "Concrete 10"
+        },
+        "count": 3,
+        "quantity": {
+          "value": 1116.49,
+          "unit": "m2"
+        },
+        "elements_without_value": 0
+      },
+      {
+        "group": {
+          "type": "Concrete 12\""
+        },
+        "count": 3,
+        "quantity": {
+          "value": 298.033,
+          "unit": "m2"
+        },
+        "elements_without_value": 0
+      },
+      {
+        "group": {
+          "type": "Concrete 6"
+        },
+        "count": 4,
+        "quantity": {
+          "value": 1087.83,
+          "unit": "m2"
+        },
+        "elements_without_value": 0
+      },
+      {
+        "group": {
+          "type": "NW Concrete on Metal Deck"
+        },
+        "count": 12,
+        "quantity": {
+          "value": 3943.871,
+          "unit": "m2"
+        },
+        "elements_without_value": 0
+      }
+    ],
+    "truncated": false,
+    "total": 5,
+    "returned": 5,
+    "category": "Floors",
+    "metric": "area",
+    "grand_total": {
+      "count": 27,
+      "quantity": {
+        "value": 6513.544,
+        "unit": "m2"
+      }
+    },
+    "elements_without_value": 0,
+    "criterion": "Area calculada del elemento hospedador (HOST_AREA_COMPUTED). Incluye todas las fases; sin filtro de demolicion."
+  },
+  "por_nivel": {
+    "data": [
+      {
+        "group": {
+          "level": "L1_35_Low"
+        },
+        "count": 1,
+        "quantity": {
+          "value": 377.856,
+          "unit": "m2"
+        },
+        "elements_without_value": 0
+      },
+      {
+        "group": {
+          "level": "L1_37_Med"
+        },
+        "count": 1,
+        "quantity": {
+          "value": 579.607,
+          "unit": "m2"
+        },
+        "elements_without_value": 0
+      },
+      {
+        "group": {
+          "level": "L1_43_High"
+        },
+        "count": 4,
+        "quantity": {
+          "value": 457.06,
+          "unit": "m2"
+        },
+        "elements_without_value": 0
+      },
+      {
+        "group": {
+          "level": "L2"
+        },
+        "count": 1,
+        "quantity": {
+          "value": 397.492,
+          "unit": "m2"
+        },
+        "elements_without_value": 0
+      },
+      {
+        "group": {
+          "level": "L3"
+        },
+        "count": 3,
+        "quantity": {
+          "value": 876.267,
+          "unit": "m2"
+        },
+        "elements_without_value": 0
+      },
+      {
+        "group": {
+          "level": "L4"
+        },
+        "count": 2,
+        "quantity": {
+          "value": 962.948,
+          "unit": "m2"
+        },
+        "elements_without_value": 0
+      },
+      {
+        "group": {
+          "level": "L5"
+        },
+        "count": 3,
+        "quantity": {
+          "value": 892.992,
+          "unit": "m2"
+        },
+        "elements_without_value": 0
+      },
+      {
+        "group": {
+          "level": "M1"
+        },
+        "count": 1,
+        "quantity": {
+          "value": 83.544,
+          "unit": "m2"
+        },
+        "elements_without_value": 0
+      },
+      {
+        "group": {
+          "level": "Parapet 2"
+        },
+        "count": 5,
+        "quantity": {
+          "value": 67.32,
+          "unit": "m2"
+        },
+        "elements_without_value": 0
+      },
+      {
+        "group": {
+          "level": "Parking"
+        },
+        "count": 4,
+        "quantity": {
+          "value": 1087.83,
+          "unit": "m2"
+        },
+        "elements_without_value": 0
+      },
+      {
+        "group": {
+          "level": "R2"
+        },
+        "count": 1,
+        "quantity": {
+          "value": 655.926,
+          "unit": "m2"
+        },
+        "elements_without_value": 0
+      },
+      {
+        "group": {
+          "level": "R2 TOS"
+        },
+        "count": 1,
+        "quantity": {
+          "value": 74.701,
+          "unit": "m2"
+        },
+        "elements_without_value": 0
+      }
+    ],
+    "truncated": false,
+    "total": 12,
+    "returned": 12,
+    "category": "Floors",
+    "metric": "area",
+    "grand_total": {
+      "count": 27,
+      "quantity": {
+        "value": 6513.544,
+        "unit": "m2"
+      }
+    },
+    "elements_without_value": 0,
+    "criterion": "Area calculada del elemento hospedador (HOST_AREA_COMPUTED). Incluye todas las fases; sin filtro de demolicion."
+  },
+  "contraste_ca04": {
+    "descripcion": "Contraste contra una tabla de planificacion de Floors de Revit 2027, campos Type, Area y Count, sin filtro de fase, Itemize every instance desmarcado.",
+    "fecha": "2026-11-11",
+    "unidad": "ft2, que es la unidad de area del proyecto",
+    "nota": "Las diferencias de 0,01 ft2 provienen de reconvertir a ft2 el valor que el MCP ya redondeo a tres decimales en m2, no de una discrepancia de lectura.",
+    "tolerancia": "0,5% por grupo",
+    "maxima_diferencia_observada": "0,0005%",
+    "resultado": "CA-04 cumple",
+    "grupos": [
+      {
+        "type": "1 1/2 Metal Roof Deck NO Concrete",
+        "count_mcp": 5,
+        "count_revit": 5,
+        "ft2_mcp": 724.63,
+        "ft2_revit": 724.63
+      },
+      {
+        "type": "Concrete 6",
+        "count_mcp": 4,
+        "count_revit": 4,
+        "ft2_mcp": 11709.3,
+        "ft2_revit": 11709.31
+      },
+      {
+        "type": "Concrete 10",
+        "count_mcp": 3,
+        "count_revit": 3,
+        "ft2_mcp": 12017.8,
+        "ft2_revit": 12017.8
+      },
+      {
+        "type": "Concrete 12\"",
+        "count_mcp": 3,
+        "count_revit": 3,
+        "ft2_mcp": 3208.0,
+        "ft2_revit": 3208.0
+      },
+      {
+        "type": "NW Concrete on Metal Deck",
+        "count_mcp": 12,
+        "count_revit": 12,
+        "ft2_mcp": 42451.47,
+        "ft2_revit": 42451.48
+      }
+    ],
+    "total": {
+      "count_mcp": 27,
+      "count_revit": 27,
+      "ft2_mcp": 70111.2,
+      "ft2_revit": 70111.21
+    }
+  }
+}

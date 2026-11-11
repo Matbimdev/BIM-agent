@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "bim-agent": {
+      "type": "stdio",
+      "command": "uv",
+      "args": [
+        "run",
+        "--directory",
+        "mcp-server",
+        "bim-agent-mcp"
+      ],
+      "env": {}
+    }
+  }
+}

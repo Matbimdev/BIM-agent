@@ -2,7 +2,13 @@
 import os
 from pathlib import Path
 
-BRIDGE_URL = os.environ.get("BIM_AGENT_BRIDGE_URL", "http://localhost:48884/bim-agent")
+# Si BIM_AGENT_BRIDGE_URL esta definida se usa fija. Si no, se parte de 48884 y, cuando ese puerto
+# no responde o no tiene modelo, se busca en BRIDGE_PORTS: pyRevit da el siguiente puerto libre a
+# cada sesion de Revit abierta (por ejemplo 2026 en 48884 y 2027 en 48885).
+BRIDGE_URL_FIXED = os.environ.get("BIM_AGENT_BRIDGE_URL")
+BRIDGE_PORTS = range(48884, 48891)
+BRIDGE_URL = BRIDGE_URL_FIXED or "http://localhost:48884/bim-agent"
+DISCOVERY_TIMEOUT_SECONDS = 2.0
 TIMEOUT_SECONDS = float(os.environ.get("BIM_AGENT_TIMEOUT", "60"))
 TOKEN_PATH = Path(os.environ.get("APPDATA", str(Path.home()))) / "BIMAgent" / "token"
 REPORT_DIR = Path(os.environ.get("BIM_AGENT_REPORT_DIR", str(Path.home() / "Documents" / "BIMAgent")))

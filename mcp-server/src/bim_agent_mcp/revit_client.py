@@ -35,11 +35,37 @@ class RevitClient:
         token_path: Path = config.TOKEN_PATH,
         timeout: float = config.TIMEOUT_SECONDS,
         transport: httpx.BaseTransport | None = None,
+        discover: bool | None = None,
+        ports: range = config.BRIDGE_PORTS,
     ):
         self._base_url = base_url.rstrip("/")
         self._token_path = token_path
         self._timeout = timeout
         self._transport = transport
+        self._discover = (config.BRIDGE_URL_FIXED is None) if discover is None else discover
+        self._ports = ports
+
+    @property
+    def base_url(self) -> str:
+        return self._base_url
+
+    def _find_bridge(self, token: str) -> str | None:
+        """Prueba /health en cada puerto y devuelve el bridge que tiene un proyecto abierto."""
+        without_document = None
+        with httpx.Client(timeout=config.DISCOVERY_TIMEOUT_SECONDS, transport=self._transport) as client:
+            for port in self._ports:
+                url = f"http://localhost:{port}/bim-agent"
+                try:
+                    response = client.post(f"{url}/health", json={"token": token, "args": {}})
+                    payload = response.json()
+                except (httpx.HTTPError, ValueError):
+                    continue
+                if response.status_code != 200 or not isinstance(payload, dict):
+                    continue
+                if payload.get("document"):
+                    return url
+                without_document = without_document or url
+        return without_document
 
     def _token(self) -> str:
         try:
@@ -48,7 +74,22 @@ class RevitClient:
             raise _unavailable() from exc
 
     def post(self, endpoint: str, args: dict[str, Any] | None = None) -> dict[str, Any]:
-        body = {"token": self._token(), "args": args or {}}
+        """Llama al bridge. Si no responde o no tiene modelo, busca otra sesion de Revit y reintenta
+        una vez; es seguro porque todas las rutas son de solo lectura."""
+        token = self._token()
+        try:
+            return self._post_once(endpoint, args, token)
+        except RevitError as err:
+            if not self._discover or err.error_type not in ("BridgeUnavailable", "NoDocument"):
+                raise
+            found = self._find_bridge(token)
+            if found is None or found == self._base_url:
+                raise
+            self._base_url = found
+            return self._post_once(endpoint, args, token)
+
+    def _post_once(self, endpoint: str, args: dict[str, Any] | None, token: str) -> dict[str, Any]:
+        body = {"token": token, "args": args or {}}
         try:
             with httpx.Client(timeout=self._timeout, transport=self._transport) as client:
                 response = client.post(f"{self._base_url}/{endpoint}", json=body)

@@ -1,34 +1,32 @@
 # Roadmap
 
+Entrega del MVP: 17/11/2026. Actualizado el 2026-11-11.
 
-## Fase 0 - Fundacion (cerrada 18/10)
-- [x] Estructura de carpetas y CLAUDE.md
-- [x] `02-contrato-herramientas.md` con las 10 tools
-- [x] ADR-001 a ADR-005
+## F0 a F4 - Construccion (cerradas 01/11)
+- [x] Estructura, contrato de las 10 herramientas y ADR-001 a ADR-006
+- [x] Bridge pyRevit y servidor MCP registrado en Claude Desktop
+- [x] Las 10 herramientas implementadas y probadas contra Revit 2026 con Snowdon
+- [x] Excel con resumen, hoja por regla, trazabilidad y score
+- [x] Correcciones de campo: categorias no modelo, ElementId en muestras, familias no usadas, `Element.Name`
+- [x] Repositorio privado en GitHub
 
-## F1 - Vertical slice (cerrada 01/11)
-- [x] Bridge: `startup.py` + `/health` + `/overview`
-- [x] MCP: `revit_client.py` + `get_model_overview` + registro en Claude Desktop
-- Salida: Claude responde la radiografia leyendo un modelo real
+## F5 - Cierre tecnico (12 y 13/11)
+- [ ] Contrastar el metrado de Floors con una tabla de planificacion de Revit (CA-04, diferencia menor a 0,5%)
+- [ ] Contrastar 2 o 3 familias no usadas con `Select All Instances`
+- [ ] Probar vinculos con un vinculo sin fijar y un CAD importado en una copia del modelo
+- [ ] Panel pyRevit minimo: iniciar y detener el servidor, estado, seleccionar hallazgo por UniqueId
+- [ ] Revisar pesos y limites del score en `config.py`
+- [ ] Decidir el ruido de vistas no colocadas (tablas, 3D, planos de area) y de etiquetas sin uso
 
-## F2 - Flujo completo (3 y 4/11)
-- [ ] `get_warnings`, `export_report` basico
-- Salida: primer Excel real con UniqueId
+## F6 - Validacion (14 y 15/11)
+- [ ] Linea base: auditoria manual cronometrada sobre Snowdon con las mismas reglas
+- [ ] Prueba con 2 o 3 usuarios: tiempo, cobertura y comentarios
+- [ ] Medir CA-01 a CA-06 y registrar errores y correcciones
+- [ ] Video de demostracion continua de 3 a 5 minutos
 
-## F3 - MVP indispensable (5 al 7/11)
-- [ ] `get_sheets_and_views`, `audit_families`, `audit_naming`, `audit_parameters`, score
-- Salida: herramientas 1, 4, 5, 6, 7, 8 y 10 operativas
-
-## F4 - Alcance completo (8/11)
-- [ ] `audit_links_coordinates`, `query_elements`, `get_quantities`
-- Salida: las 10 herramientas, con reduccion declarada si hace falta
-
-## F5 - Validacion (9 y 10/11)
-- [ ] Panel pyRevit minimo, linea base cronometrada, prueba con usuarios, correcciones, video de respaldo
-- Salida: CA-01 a CA-06 medidos
-
-## F6 - Entrega (11 y 12/11)
-- [ ] Ficha tecnica e instalacion por un tercero
+## F7 - Entrega (16 y 17/11)
+- [ ] Ficha tecnica: instalacion, dependencias, uso, datos de prueba, restricciones y reproduccion
+- [ ] Instalacion por un tercero en otra maquina
+- [ ] Quitar referencias academicas de `docs/02` y `docs/03`
 
 MVP indispensable: herramientas 1, 4, 5, 6, 7, 8 y 10.
-Reordenado el 2026-11-01: el flujo de extremo a extremo se cierra antes que la cobertura.

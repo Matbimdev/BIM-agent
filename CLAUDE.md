@@ -111,10 +111,26 @@ Cada tool nueva se entrega con un fixture en `samples/payloads/` y un test que c
 Verificacion manual de una tool: `scripts/smoke.py <tool> <args>` contra un modelo abierto,
 antes de darla por cerrada.
 
-## 6. Estado
+## 6. Estado (2026-11-11)
 
-Roadmap en `docs/04-roadmap.md`. Herramientas implementadas: `get_model_overview`, `get_warnings`,
-`get_sheets_and_views`, `audit_families`, `audit_naming`, `audit_parameters` y `export_report`.
-Validadas contra Revit 2026: `get_model_overview`, `get_warnings` y `export_report`.
+Roadmap y siguientes pasos en `docs/04-roadmap.md`. Empezar cada sesion por ahi.
+
+Las 10 herramientas estan implementadas y todas respondieron contra Revit 2026 con Snowdon
+(2026-11-01). Validado con datos reales: radiografia (1.450 elementos de modelo), warnings (2),
+planos (12) y vistas no colocadas (55), familias (44 no usadas, 102 no evaluadas), nomenclatura,
+parametros (`Mark` vacio en 74 columnas), vinculos y puntos base, metrado de Floors
+(6.513,544 m2 en 27 pisos) y Excel.
+
+Pendiente de contrastar con Revit: metrado de Floors contra una tabla de planificacion
+(tolerancia 0,5%), familias no usadas con `Select All Instances`, reglas de vinculos con un
+vinculo sin fijar y un CAD importado en una copia del modelo.
+
+Limitaciones declaradas: no se audita el posicionamiento por coordenadas compartidas; el metrado
+incluye todas las fases; las familias usadas solo como referencia de tipo pueden salir como no
+usadas; el score de salud usa pesos y limites provisionales sin calibrar.
+
 Revit 2027 sin validar: el servidor de Routes no respondio, causa sin diagnosticar.
-Las 10 herramientas estan escritas. Falta validar contra Revit `audit_links_coordinates`, `query_elements`, `get_quantities` y la correccion de `audit_families`. Pendiente: panel pyRevit.
+
+Leccion IronPython: `.Name` falla en tipos como `FamilySymbol`; usar `serializers.element_name`
+(`Element.Name.GetValue`). Los tests sin Revit no detectan estos errores: validar cada endpoint
+nuevo con `scripts/smoke.py` o por MCP contra el modelo.

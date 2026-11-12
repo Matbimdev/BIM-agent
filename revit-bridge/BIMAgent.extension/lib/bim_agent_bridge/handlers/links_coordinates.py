@@ -56,7 +56,7 @@ def _links(doc):
         placed = instances.get(link_type.Id.Value, [])
         status = link_type.GetLinkedFileStatus()
         links.append({
-            "name": link_type.Name,
+            "name": serializers.element_name(link_type),
             "kind": "ifc" if ".ifc" in _link_path(link_type).lower() else "rvt",
             "loaded": status == LinkedFileStatus.Loaded,
             "path_found": status != LinkedFileStatus.NotFound,

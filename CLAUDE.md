@@ -132,6 +132,6 @@ usadas; el score de salud usa pesos y limites provisionales sin calibrar.
 Revit 2027 validado (2026-11-11): las 10 herramientas responden con Snowdon y los mismos resultados.
 Con dos versiones abiertas, pyRevit asigna el siguiente puerto libre (48885) a la segunda; el MCP hoy solo usa 48884.
 
-Leccion IronPython: `.Name` falla en tipos como `FamilySymbol`; usar `serializers.element_name`
+Leccion IronPython: `.Name` falla en tipos como `FamilySymbol` o `RevitLinkType` (cualquier `ElementType`); usar `serializers.element_name`
 (`Element.Name.GetValue`). Los tests sin Revit no detectan estos errores: validar cada endpoint
 nuevo con `scripts/smoke.py` o por MCP contra el modelo.

@@ -1,0 +1,164 @@
+{
+  "_evidencia": {
+    "descripcion": "Contraste de audit_families (check unused) contra Revit. Respaldo de CP-06.",
+    "modelo": "Snowdon Towers Sample Structural",
+    "revit": "2027",
+    "fecha": "2026-11-11",
+    "resultado_mcp": {
+      "familias_cargadas": 185,
+      "evaluadas": 83,
+      "evaluadas_sin_uso": 44,
+      "evaluadas_en_uso": 39,
+      "no_evaluadas": 102,
+      "en_simple": "La herramienta opina sobre 83 de las 185 familias. De esas, 44 estan sin usar. Sobre las otras 102 no dice nada."
+    }
+  },
+  "metodo": [
+    "Las 44 no usadas se separaron en dos grupos cruzandolas con el conteo por categoria de get_model_overview.",
+    "41 estan en categorias sin un solo elemento en el modelo, de modo que el resultado se deduce del propio overview.",
+    "3 estan en categorias con elementos: son los unicos casos donde la herramienta podia equivocarse, y se probaron a mano."
+  ],
+  "casos_probados_en_revit": [
+    {
+      "family": "SF_Reference Beam",
+      "category": "Structural Framing",
+      "elementos_en_la_categoria": 942,
+      "select_all_instances": "sin instancias en ningun tipo",
+      "aparece_en_purge": true,
+      "veredicto": "correcto",
+      "por_que_importa": "El nombre sugiere uso como referencia de tipo, que es la limitacion declarada del producto. No se reprodujo."
+    },
+    {
+      "family": "SFD_Rectangle",
+      "category": "Structural Foundations",
+      "elementos_en_la_categoria": 90,
+      "select_all_instances": "sin instancias en ningun tipo",
+      "aparece_en_purge": true,
+      "veredicto": "correcto"
+    },
+    {
+      "family": "EnscapeCamera",
+      "category": "Generic Models",
+      "elementos_en_la_categoria": 91,
+      "select_all_instances": "sin instancias en ningun tipo",
+      "aparece_en_purge": true,
+      "veredicto": "correcto"
+    }
+  ],
+  "cp06_corregido": {
+    "texto_original": "Familias no usadas iguales a las que lista Purgar",
+    "problema": "Las dos listas no pueden ser iguales. Purge Unused trabaja a nivel de tipo y lista una familia en cuanto uno de sus tipos no se usa, aunque la familia tenga instancias. audit_families audita a nivel de familia.",
+    "caso_que_lo_demuestra": {
+      "family": "SF_Steel L Angle",
+      "aparece_en_purge": true,
+      "reportada_como_no_usada_por_el_mcp": false,
+      "instancias_reales": 25,
+      "tipo_en_uso": "_Size",
+      "conclusion": "La familia se usa. Purge la lista por sus otros tipos. No hay falso negativo."
+    },
+    "otros_casos_iguales": [
+      "C Shapes (tipo C8X11.5, 6 instancias)",
+      "W Shapes (W12X26, W14X30, W16X26, W18x55, W18x86, W30x235, W36x232, W8x10)"
+    ],
+    "redaccion_nueva": "Toda familia que audit_families marca como no usada aparece en Purge Unused. El recorrido inverso no aplica: Purge lista ademas familias en uso que tienen tipos sin usar."
+  },
+  "sobre_las_102_no_evaluadas": {
+    "motivo": "Por diseno. El check unused solo corre sobre categorias colocables y sobre categorias de etiquetas (_evaluable en audit_families.py). En el resto, contar instancias no es significativo.",
+    "efecto": "No son falsos negativos declarados como tales: son familias sobre las que la herramienta no se pronuncia, y el numero se devuelve en cada respuesta.",
+    "por_categoria": {
+      "Rebar Shape": {
+        "familias": 39,
+        "sin_instancias": 39
+      },
+      "Profiles": {
+        "familias": 8,
+        "sin_instancias": 8
+      },
+      "Connection Symbols": {
+        "familias": 6,
+        "sin_instancias": 6
+      },
+      "Curtain Wall Mullions": {
+        "familias": 6,
+        "sin_instancias": 6
+      },
+      "Boundary Conditions": {
+        "familias": 4,
+        "sin_instancias": 4
+      },
+      "Elevation Marks": {
+        "familias": 4,
+        "sin_instancias": 4
+      },
+      "Section Marks": {
+        "familias": 4,
+        "sin_instancias": 4
+      },
+      "Structural Rebar Couplers": {
+        "familias": 4,
+        "sin_instancias": 4
+      },
+      "Brace in Plan View Symbols": {
+        "familias": 3,
+        "sin_instancias": 3
+      },
+      "Division Profiles": {
+        "familias": 3,
+        "sin_instancias": 3
+      },
+      "Structural Connections": {
+        "familias": 3,
+        "sin_instancias": 0
+      },
+      "Structural Fabric Reinforcement Symbols": {
+        "familias": 3,
+        "sin_instancias": 3
+      },
+      "Callout Heads": {
+        "familias": 2,
+        "sin_instancias": 2
+      },
+      "Curtain Panels": {
+        "familias": 2,
+        "sin_instancias": 2
+      },
+      "Span Direction Symbol": {
+        "familias": 2,
+        "sin_instancias": 0
+      },
+      "Spot Elevation Symbols": {
+        "familias": 2,
+        "sin_instancias": 2
+      },
+      "Balusters": {
+        "familias": 1,
+        "sin_instancias": 1
+      },
+      "Grid Heads": {
+        "familias": 1,
+        "sin_instancias": 1
+      },
+      "Level Heads": {
+        "familias": 1,
+        "sin_instancias": 1
+      },
+      "Structural Area Reinforcement Symbols": {
+        "familias": 1,
+        "sin_instancias": 1
+      },
+      "Structural Path Reinforcement Symbols": {
+        "familias": 1,
+        "sin_instancias": 1
+      },
+      "View Reference": {
+        "familias": 1,
+        "sin_instancias": 1
+      },
+      "View Titles": {
+        "familias": 1,
+        "sin_instancias": 1
+      }
+    },
+    "costo": "Decision conservadora. Evita reportar unas 97 familias sin instancias que pueden estar en uso desde un tipo, a cambio de callar algunas que si sobran. El complemento para esas categorias es Purge Unused."
+  }
+}

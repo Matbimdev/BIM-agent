@@ -13,7 +13,13 @@ TIMEOUT_SECONDS = float(os.environ.get("BIM_AGENT_TIMEOUT", "60"))
 TOKEN_PATH = Path(os.environ.get("APPDATA", str(Path.home()))) / "BIMAgent" / "token"
 REPORT_DIR = Path(os.environ.get("BIM_AGENT_REPORT_DIR", str(Path.home() / "Documents" / "BIMAgent")))
 
-# Score de salud: heuristica sin calibrar. Cada componente vale 100% en 0 y 0% al llegar a su limite.
+# Score de salud: heuristica provisional, sin calibrar. Pesos y limites son juicio del autor, no
+# salen de datos: con un solo modelo de prueba no se pueden calibrar.
+# Cada componente vale su peso completo con valor 0 y baja en linea recta hasta 0 al llegar a su
+# limite. Warnings va por cada 1000 elementos; los demas son conteos absolutos, asi que no escalan
+# con el tamano del modelo (50 familias sin usar pesan igual en 185 familias que en 2000).
+# Referencia: Snowdon Towers Structural limpio da 76 (11/11/2026). Pierde 13,2 puntos por 44
+# familias sin usar, 24 de ellas etiquetas de plantilla, y 10,8 por 36 vistas exigibles sin plano.
 HEALTH_COMPONENTS = {
     "warnings_por_1000": {"weight": 0.25, "limit": 110},
     "familias_in_place": {"weight": 0.15, "limit": 20},

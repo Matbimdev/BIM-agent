@@ -60,7 +60,11 @@ Entrega del MVP: 17/11/2026. Actualizado el 2026-11-11.
       `TaskDialog` de la API de Revit; y `Estado` no llama a `/health` por HTTP, porque
       Routes despacha al hilo principal y el boton se bloquearia esperando su propia
       respuesta. 19 tests nuevos del parseo de UniqueId, 82 en total
-- [ ] Revisar pesos y limites del score en `config.py`
+- [x] Score revisado el 11/11 y declarado como heuristica provisional, sin recalibrar: con un
+      solo modelo no hay con que calibrar. Snowdon limpio da 76; pierde 13,2 puntos por familias
+      sin usar y 10,8 por vistas no colocadas. Limitacion declarada: familias y vistas son
+      conteos absolutos y no escalan con el tamano del modelo. Pasar a proporciones queda para
+      la v2
 - [x] Ruido de vistas no colocadas, 11/11: cada vista lleva `required`. Son exigibles plantas,
       cortes, alzados, detalles, dibujos, leyendas y tablas; 3D y planos de area son
       informativas. Se devuelven todas, pero solo las exigibles van a la regla VIS-001 y al

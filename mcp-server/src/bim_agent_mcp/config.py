@@ -25,4 +25,10 @@ HEALTH_COMPONENTS = {
 
 # Vistas que no exigen plano: prefijo de trabajo y vistas creadas por Revit, como {3D}.
 WORKING_VIEW_PATTERN = r"^(WIP|TRABAJO|\{)"
+# Tipos de vista que la regla VIS-001 exige ver en un plano. Los demas (ThreeD, AreaPlan, ...) se
+# reportan como informativos y no cuentan para la regla ni para el score.
+REQUIRED_VIEW_TYPES = frozenset({
+    "FloorPlan", "CeilingPlan", "EngineeringPlan", "Elevation", "Section", "Detail", "DraftingView",
+    "Legend", "Schedule", "PanelSchedule", "ColumnSchedule",
+})
 RESULT_LIMIT = 200

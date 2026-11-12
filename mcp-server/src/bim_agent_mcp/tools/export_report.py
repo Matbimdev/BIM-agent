@@ -46,7 +46,7 @@ def _measurements(session: Session) -> dict[str, float]:
         found["familias_no_usadas"] = len(result["unused"])
     views = session.results.get("get_sheets_and_views")
     if views:
-        found["vistas_no_colocadas"] = len(get_sheets_and_views.unplaced(views))
+        found["vistas_no_colocadas"] = len(get_sheets_and_views.required_unplaced(views))
     links = session.results.get("audit_links_coordinates")
     if links:
         found["hallazgos_vinculos"] = len(audit_links_coordinates.findings(links))

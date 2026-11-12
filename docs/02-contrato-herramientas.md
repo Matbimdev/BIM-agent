@@ -99,9 +99,11 @@ Entrada: `{"include_unplaced": true, "view_types": ["FloorPlan", "Section"]}`.
 Salida:
 ```json
 {"sheets": {"total": 42, "data": [{"number": "A-101", "name": "Planta N+0.00", "views_placed": 3, "current_revision": "R02"}]},
- "unplaced_views": {"total": 27, "data": [{"name": "Corte 5", "view_type": "Section", "unique_id": ""}]}}
+ "unplaced_views": {"total": 27, "data": [{"name": "Corte 5", "view_type": "Section", "required": true, "unique_id": ""}]},
+ "unplaced_summary": {"required": 20, "informative": 7}}
 ```
 Regla: toda vista de trabajo debe estar colocada en un plano. Se excluyen plantillas, vistas de sistema, vistas creadas por Revit (nombre entre llaves, como `{3D}`) y vistas cuyo nombre cumple el patron de trabajo configurado (por defecto prefijo `WIP` o `TRABAJO`).
+Exigibles e informativas: cada vista no colocada lleva `required`. Es `true` si su tipo esta en `REQUIRED_VIEW_TYPES` de `config.py`: plantas (`FloorPlan`, `CeilingPlan`, `EngineeringPlan`), `Elevation`, `Section`, `Detail`, `DraftingView`, `Legend` y tablas (`Schedule`, `PanelSchedule`, `ColumnSchedule`). Cualquier otro tipo, como `ThreeD` o `AreaPlan`, es informativo: se devuelve, pero no cuenta para la regla. Solo las exigibles van a la hoja de la regla VIS-001 del reporte y al score. Nada se oculta: `unplaced_views` trae todas y `unplaced_summary` las cuenta por separado.
 Endpoint: `/sheets_views`.
 
 ## 5. get_warnings
@@ -188,4 +190,4 @@ Entrada: `{"sections": ["warnings", "families", "naming", "parameters", "links",
 
 Salida: `{"path": "C:/.../BIMAgent_Auditoria_<modelo>_<fecha>.xlsx", "sheets": ["Resumen", "Warnings", "..."], "health_score": {"value": 72, "max": 100, "components": [{"name": "warnings_por_1000", "value": 44, "weight": 0.25, "points": 15}]}}`.
 Estructura del Excel: hoja `Resumen` (modelo, fecha, score y sus componentes, reglas aplicadas); una hoja por regla con columnas `Regla`, `Texto de la regla`, `UniqueId`, `ElementId`, `Elemento`, `Categoria`, `Nivel`, `Valor encontrado`, `Valor esperado`; hoja `Trazabilidad` con cada llamada (herramienta, argumentos, hora).
-Score de salud: heuristica con pesos declarados en `config.py` (warnings por 1000 elementos, familias in-place, familias no usadas, vistas no colocadas, CAD importados, hallazgos de vinculos). Reemplaza a `audit_model_health` del Hito 1. Si faltan datos de algun componente, el score se calcula con los disponibles, se reparte el peso entre ellos y la salida lo declara con `complete: false` y `missing_components`. Las secciones sin datos en la sesion se devuelven en `sections_missing`; nunca se inventan.
+Score de salud: heuristica con pesos declarados en `config.py` (warnings por 1000 elementos, familias in-place, familias no usadas, vistas no colocadas exigibles, CAD importados, hallazgos de vinculos). Reemplaza a `audit_model_health` del Hito 1. Si faltan datos de algun componente, el score se calcula con los disponibles, se reparte el peso entre ellos y la salida lo declara con `complete: false` y `missing_components`. Las secciones sin datos en la sesion se devuelven en `sections_missing`; nunca se inventan.

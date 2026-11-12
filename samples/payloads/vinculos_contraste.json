@@ -1,0 +1,72 @@
+{
+  "_evidencia": {
+    "descripcion": "Contraste de audit_links_coordinates contra Revit. Respaldo de CP-09.",
+    "modelo": "Snowdon Towers Sample Structural con los vinculos de las demas disciplinas de Snowdon",
+    "revit": "2026",
+    "fecha": "2026-11-11",
+    "nota_datos": "Los dos DWG son archivos de prueba personales del autor, sin datos de clientes. Sus nombres se reemplazan por etiquetas genericas."
+  },
+  "error_encontrado_y_corregido": {
+    "sintoma": "La primera corrida fallo con 'El bridge no pudo leer el modelo: Name'.",
+    "causa": "links_coordinates.py leia RevitLinkType.Name. RevitLinkType es un ElementType y bajo IronPython .Name no se resuelve en esos tipos, igual que en FamilySymbol.",
+    "correccion": "Se usa serializers.element_name(link_type), que lee Element.Name.GetValue.",
+    "por_que_no_se_vio_antes": "Snowdon sin vinculos nunca entraba en ese bucle, y los tests sin Revit no ejecutan la API."
+  },
+  "casos": [
+    {
+      "elemento": "Snowdon Towers Sample Architectural.rvt",
+      "leido": "rvt, cargado, sin fijar",
+      "hallazgo": "link_pinned",
+      "confirmado_en_revit": true
+    },
+    {
+      "elemento": "Snowdon Towers Sample Facades.rvt",
+      "leido": "rvt, cargado, sin fijar",
+      "hallazgo": "link_pinned",
+      "confirmado_en_revit": true
+    },
+    {
+      "elemento": "Snowdon Towers Sample HVAC.rvt",
+      "leido": "rvt, cargado, sin fijar",
+      "hallazgo": "link_pinned",
+      "confirmado_en_revit": true
+    },
+    {
+      "elemento": "Snowdon Towers Sample Electrical.rvt",
+      "leido": "rvt, cargado, sin fijar",
+      "hallazgo": "link_pinned",
+      "confirmado_en_revit": true
+    },
+    {
+      "elemento": "Snowdon Towers Sample Plumbing.rvt",
+      "leido": "rvt, cargado, sin fijar",
+      "hallazgo": "link_pinned",
+      "confirmado_en_revit": true
+    },
+    {
+      "elemento": "Snowdon Towers Sample Site.rvt",
+      "leido": "rvt, cargado, sin fijar",
+      "hallazgo": "link_pinned",
+      "confirmado_en_revit": true
+    },
+    {
+      "elemento": "DWG de prueba A",
+      "leido": "CAD vinculado y fijado",
+      "hallazgo": null,
+      "papel": "control negativo: no debe marcarse"
+    },
+    {
+      "elemento": "DWG de prueba B",
+      "leido": "CAD importado y fijado",
+      "hallazgo": "cad_imported",
+      "papel": "se marca aunque este fijado: importar es el problema"
+    }
+  ],
+  "resultado": "CP-09 cumple: detecta los vinculos sin fijar y el CAD importado, y no marca el CAD vinculado y fijado.",
+  "no_probado": [
+    "link_loaded y link_path (vinculo descargado o con ruta rota)",
+    "cad_pinned (CAD vinculado sin fijar)",
+    "base_point_distance (el punto base de Snowdon esta en el origen)"
+  ],
+  "no_evaluado_por_diseno": "Posicionamiento por coordenadas compartidas: la API no lo expone directamente."
+}

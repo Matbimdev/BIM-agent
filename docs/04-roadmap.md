@@ -40,7 +40,17 @@ Entrega del MVP: 17/11/2026. Actualizado el 2026-11-11.
       25 instancias del tipo `_Size`. Redaccion nueva: toda familia que la herramienta
       marca como no usada aparece en Purge; el recorrido inverso no aplica.
       Evidencia en `samples/payloads/familias_no_usadas_contraste.json`
-- [ ] Probar vinculos con un vinculo sin fijar y un CAD importado en una copia del modelo
+- [x] CP-09 cumple, 11/11 en Revit 2026, sobre Snowdon con los 6 vinculos de las demas
+      disciplinas y dos DWG de prueba personales: marca los 6 RVT sin fijar (confirmados a
+      mano), marca el DWG importado aunque este fijado y no marca el DWG vinculado y fijado.
+      La primera corrida fallo con `Name`: el bridge leia `RevitLinkType.Name`, que IronPython
+      no resuelve; se corrigio con `serializers.element_name`. No se vio antes porque Snowdon
+      sin vinculos nunca entraba en ese bucle. Sin probar: vinculo descargado o con ruta rota,
+      CAD vinculado sin fijar y punto base lejos del origen. Evidencia en
+      `samples/payloads/vinculos_contraste.json`
+- [ ] `get_model_overview` cuenta `RVT Links` y cada DWG como categorias de modelo: con los
+      vinculos, `elements_total` pasa de 1.450 a 1.457 y ese total es el denominador de los
+      warnings por mil
 - [x] Panel pyRevit minimo, probado en Revit 2027 el 11/11: `BIMAgent.tab/Auditoria.panel`
       con `Iniciar/Detener` (alterna el bridge), `Estado` (bridge, puerto, modelo y version)
       y `Seleccionar` (selecciona por UniqueId pegado desde el reporte). Pantalla P1 del

@@ -26,7 +26,13 @@ def findings(raw: dict[str, Any], include_cad: bool = True, max_distance_km: flo
         elif not link["loaded"]:
             add("link_loaded", link, f"Vinculo sin cargar ({link['status']})")
         if link["instances"] and not link["pinned"]:
-            add("link_pinned", link, "Vinculo sin fijar")
+            # Un hallazgo por instancia sin fijar, con su UniqueId: el del tipo no se resalta en
+            # el modelo. Un bridge anterior no manda la lista; entonces se reporta el tipo.
+            unpinned = link.get("unpinned_instances")
+            if unpinned is None:
+                add("link_pinned", link, "Vinculo sin fijar")
+            for instance in unpinned or []:
+                add("link_pinned", {**instance, "name": link["name"]}, "Vinculo sin fijar")
     if include_cad:
         for cad in raw["cad"]:
             if not cad["linked"]:
@@ -44,7 +50,10 @@ def findings(raw: dict[str, Any], include_cad: bool = True, max_distance_km: flo
 def normalize(raw: dict[str, Any], include_cad: bool = True, max_distance_km: float = 10) -> dict[str, Any]:
     links = [{"name": link["name"], "kind": link["kind"], "loaded": link["loaded"], "pinned": link["pinned"],
               "positioning": "not_evaluated", "path_found": link["path_found"], "unique_id": link["unique_id"],
-              "element_id": int(link["element_id"])} for link in raw["links"]]
+              "element_id": int(link["element_id"]), "instances": link.get("instances", 0),
+              "unpinned_instances": [{"unique_id": i["unique_id"], "element_id": int(i["element_id"])}
+                                     for i in link.get("unpinned_instances") or []]}
+             for link in raw["links"]]
     result = {"base_point": raw.get("base_point"), "survey_point": raw.get("survey_point"), "links": links,
               "findings": [{**item, "element_id": int(item["element_id"]) if item["element_id"] else None}
                            for item in findings(raw, include_cad, max_distance_km)],

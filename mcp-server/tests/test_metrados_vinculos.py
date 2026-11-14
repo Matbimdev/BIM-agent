@@ -1,4 +1,7 @@
 """Pruebas sin Revit de query_elements, get_quantities y audit_links_coordinates."""
+import json
+from pathlib import Path
+
 import pytest
 
 from bim_agent_mcp.revit_client import RevitError
@@ -152,3 +155,33 @@ def test_vinculos_filas_del_reporte():
     rows = links.rows(links_raw([link(pinned=False)]))
     assert rows[0][0] == "VIN-003"
     assert rows[0][3] == 9
+
+
+def test_vinculo_sin_fijar_apunta_a_la_instancia_y_no_al_tipo():
+    raw = links_raw([link(pinned=False, unpinned_instances=[{"unique_id": "inst-1", "element_id": "91"}])])
+    found = links.findings(raw)
+    assert [(f["rule"], f["unique_id"], f["element_id"], f["target"]) for f in found] == [
+        ("link_pinned", "inst-1", "91", "EST.rvt")]
+    out = links.normalize(raw)
+    assert out["links"][0]["unique_id"] == "l"
+    assert out["links"][0]["unpinned_instances"] == [{"unique_id": "inst-1", "element_id": 91}]
+    assert out["findings"][0]["element_id"] == 91
+
+
+def test_vinculo_con_varias_instancias_da_un_hallazgo_por_instancia_sin_fijar():
+    raw = links_raw([link(instances=3, pinned=False, unpinned_instances=[
+        {"unique_id": "a", "element_id": "1"}, {"unique_id": "b", "element_id": "2"}])])
+    assert [f["unique_id"] for f in links.findings(raw)] == ["a", "b"]
+    assert [row[2] for row in links.rows(raw)] == ["a", "b"]
+
+
+def test_snowdon_real_hallazgos_de_vinculos_apuntan_a_instancias():
+    fixture = Path(__file__).parents[2] / "samples" / "payloads" / "links_coordinates_snowdon.json"
+    raw = json.loads(fixture.read_text(encoding="utf-8"))["raw"]
+    out = links.normalize(raw)
+    pinned = [f for f in out["findings"] if f["rule"] == "link_pinned"]
+    type_ids = {link["unique_id"] for link in out["links"]}
+    assert len(pinned) == 6
+    assert all(f["unique_id"] not in type_ids for f in pinned)
+    assert [f["rule"] for f in out["findings"]].count("cad_imported") == 1
+    assert [f["rule"] for f in out["findings"]].count("cad_pinned") == 1

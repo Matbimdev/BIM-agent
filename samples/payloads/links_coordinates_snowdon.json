@@ -1,0 +1,172 @@
+{
+  "_evidencia": {
+    "descripcion": "Respuesta real del bridge /links_coordinates tras el arreglo de CA-03: cada vinculo trae sus instancias sin fijar.",
+    "modelo": "Snowdon Towers Sample Structural con los 6 vinculos de Snowdon y dos DWG de prueba personales",
+    "revit": "2026",
+    "fecha": "2026-11-14",
+    "nota_datos": "Los nombres de los DWG se reemplazan por etiquetas genericas."
+  },
+  "raw": {
+    "survey_point": {
+      "elevation": {
+        "value": -3.6576000000000004,
+        "unit": "m"
+      },
+      "ns": {
+        "value": 78713.55272204701,
+        "unit": "m"
+      },
+      "ew": {
+        "value": 417621.5868338169,
+        "unit": "m"
+      },
+      "distance_from_origin": {
+        "value": 241.55534170866545,
+        "unit": "m"
+      }
+    },
+    "cad": [
+      {
+        "name": "cad_importado.dwg",
+        "pinned": true,
+        "unique_id": "50705696-d525-4a34-a4d7-fb81280be178-000fd390",
+        "linked": false,
+        "element_id": "1037200"
+      },
+      {
+        "name": "cad_vinculado.dwg",
+        "pinned": false,
+        "unique_id": "ce464692-68f7-441a-bb9f-f9cfc095bc64-000fd3ce",
+        "linked": true,
+        "element_id": "1037262"
+      }
+    ],
+    "base_point": {
+      "elevation": {
+        "value": 237.89639999999991,
+        "unit": "m"
+      },
+      "angle_to_true_north": {
+        "value": 333.9844482159995,
+        "unit": "deg"
+      },
+      "ns": {
+        "value": 78713.98314877761,
+        "unit": "m"
+      },
+      "ew": {
+        "value": 417622.26721960434,
+        "unit": "m"
+      },
+      "distance_from_origin": {
+        "value": 0.0,
+        "unit": "m"
+      }
+    },
+    "links": [
+      {
+        "pinned": false,
+        "name": "Snowdon Towers Sample Architectural.rvt",
+        "status": "Loaded",
+        "element_id": "576455",
+        "unpinned_instances": [
+          {
+            "unique_id": "9e748b35-2e51-4170-b964-a9c0f3c563d9-0008cbc8",
+            "element_id": "576456"
+          }
+        ],
+        "loaded": true,
+        "unique_id": "9e748b35-2e51-4170-b964-a9c0f3c563d9-0008cbc7",
+        "path_found": true,
+        "instances": 1,
+        "kind": "rvt"
+      },
+      {
+        "pinned": false,
+        "name": "Snowdon Towers Sample Facades.rvt",
+        "status": "Loaded",
+        "element_id": "576468",
+        "unpinned_instances": [
+          {
+            "unique_id": "9e748b35-2e51-4170-b964-a9c0f3c563d9-0008cbd5",
+            "element_id": "576469"
+          }
+        ],
+        "loaded": true,
+        "unique_id": "9e748b35-2e51-4170-b964-a9c0f3c563d9-0008cbd4",
+        "path_found": true,
+        "instances": 1,
+        "kind": "rvt"
+      },
+      {
+        "pinned": false,
+        "name": "Snowdon Towers Sample HVAC.rvt",
+        "status": "Loaded",
+        "element_id": "787016",
+        "unpinned_instances": [
+          {
+            "unique_id": "92788ff4-0a68-45a7-8a33-1830af59d54d-000c0249",
+            "element_id": "787017"
+          }
+        ],
+        "loaded": true,
+        "unique_id": "92788ff4-0a68-45a7-8a33-1830af59d54d-000c0248",
+        "path_found": true,
+        "instances": 1,
+        "kind": "rvt"
+      },
+      {
+        "pinned": false,
+        "name": "Snowdon Towers Sample Electrical.rvt",
+        "status": "Loaded",
+        "element_id": "805013",
+        "unpinned_instances": [
+          {
+            "unique_id": "cd92b1f3-8c74-4f7b-a75d-4dd290e9e220-000c4896",
+            "element_id": "805014"
+          }
+        ],
+        "loaded": true,
+        "unique_id": "cd92b1f3-8c74-4f7b-a75d-4dd290e9e220-000c4895",
+        "path_found": true,
+        "instances": 1,
+        "kind": "rvt"
+      },
+      {
+        "pinned": false,
+        "name": "Snowdon Towers Sample Plumbing.rvt",
+        "status": "Loaded",
+        "element_id": "876480",
+        "unpinned_instances": [
+          {
+            "unique_id": "c77a437d-6c0c-41dc-b004-56ef7d7b57a0-000d5fc1",
+            "element_id": "876481"
+          }
+        ],
+        "loaded": true,
+        "unique_id": "c77a437d-6c0c-41dc-b004-56ef7d7b57a0-000d5fc0",
+        "path_found": true,
+        "instances": 1,
+        "kind": "rvt"
+      },
+      {
+        "pinned": false,
+        "name": "Snowdon Towers Sample Site.rvt",
+        "status": "Loaded",
+        "element_id": "935195",
+        "unpinned_instances": [
+          {
+            "unique_id": "54d0215b-3923-47b8-beb3-55f8d5cea386-000e451c",
+            "element_id": "935196"
+          }
+        ],
+        "loaded": true,
+        "unique_id": "54d0215b-3923-47b8-beb3-55f8d5cea386-000e451b",
+        "path_found": true,
+        "instances": 1,
+        "kind": "rvt"
+      }
+    ],
+    "document": "Snowdon Towers Sample Structural"
+  }
+}

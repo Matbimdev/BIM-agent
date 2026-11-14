@@ -63,6 +63,8 @@ def _links(doc):
             "status": str(status),
             "instances": len(placed),
             "pinned": bool(placed) and all(instance.Pinned for instance in placed),
+            "unpinned_instances": [{"unique_id": instance.UniqueId, "element_id": instance.Id.Value}
+                                   for instance in placed if not instance.Pinned],
             "unique_id": link_type.UniqueId,
             "element_id": link_type.Id.Value,
         })

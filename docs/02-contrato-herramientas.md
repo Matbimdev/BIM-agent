@@ -175,10 +175,13 @@ Salida:
 ```json
 {"base_point": {"ns": {"value": 0, "unit": "m"}, "ew": {"value": 0, "unit": "m"}, "elevation": {"value": 0, "unit": "m"}, "angle_to_true_north": {"value": 0, "unit": "deg"}},
  "survey_point": {"ns": {}, "ew": {}, "elevation": {}},
- "links": [{"name": "EST.rvt", "kind": "rvt", "loaded": true, "pinned": false, "positioning": "not_evaluated", "path_found": true}],
- "findings": [{"rule": "link_pinned", "target": "EST.rvt", "detail": "Vinculo sin fijar"}]}
+ "links": [{"name": "EST.rvt", "kind": "rvt", "loaded": true, "pinned": false, "positioning": "not_evaluated", "path_found": true,
+            "unique_id": "", "element_id": 0, "instances": 1,
+            "unpinned_instances": [{"unique_id": "", "element_id": 0}]}],
+ "findings": [{"rule": "link_pinned", "target": "EST.rvt", "detail": "Vinculo sin fijar", "unique_id": "", "element_id": 0}]}
 ```
 Reglas: todo vinculo cargado y encontrado en su ruta; fijado; posicionado por coordenadas compartidas; CAD vinculado y no importado; punto base dentro de la distancia maxima al origen interno (Revit degrada la geometria lejos del origen).
+IDs: el `unique_id` de cada vinculo es el del `RevitLinkType`, porque carga y ruta son del tipo. La fijacion es de cada instancia colocada: `unpinned_instances` las lista y `link_pinned` da un hallazgo por instancia sin fijar, con el UniqueId de la instancia, para que `Seleccionar` la resalte en el modelo (CA-03, 14/11).
 Limitacion declarada: la API no expone directamente si un vinculo esta posicionado por coordenadas compartidas, asi que `positioning` queda como `not_evaluated` en la v1 y esa regla no se audita.
 Endpoint: `/links_coordinates`.
 

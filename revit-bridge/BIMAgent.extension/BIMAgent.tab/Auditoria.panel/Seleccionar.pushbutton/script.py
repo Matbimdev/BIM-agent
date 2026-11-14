@@ -41,8 +41,28 @@ def _resolver(doc, ids_texto):
     return encontrados, faltantes
 
 
-def _informe(encontrados, faltantes):
+def _encuadrables(doc, ids):
+    """Separa lo que tiene geometria en una vista de familias, tipos y vistas.
+
+    ShowElements sobre una familia, un tipo o una vista no encuentra donde encuadrar y
+    Revit muestra "No good view could be found" (CA-03, 14/11). Esos elementos quedan
+    seleccionados igual y se leen en Propiedades.
+    """
+    con_vista, sin_vista = [], 0
+    for element_id in ids:
+        elemento = doc.GetElement(element_id)
+        if isinstance(elemento, (DB.Family, DB.ElementType, DB.View)):
+            sin_vista += 1
+        else:
+            con_vista.append(element_id)
+    return con_vista, sin_vista
+
+
+def _informe(encontrados, faltantes, sin_vista=0):
     lineas = ["Seleccionados: {}".format(len(encontrados))]
+    if sin_vista:
+        lineas.append("{} sin vista para encuadrar (familias, tipos o vistas): "
+                      "se ven en Propiedades.".format(sin_vista))
     if faltantes:
         lineas.append("No encontrados en este modelo: {}".format(len(faltantes)))
         lineas.append("")
@@ -88,15 +108,16 @@ def main():
             "Revisa que el reporte corresponda a este modelo.", advertencia=True)
         return
 
-    ids = List[DB.ElementId](encontrados)
-    uidoc.Selection.SetElementIds(ids)
-    try:
-        uidoc.ShowElements(ids)
-    except Exception as err:
-        logger.debug("No se pudo encuadrar la vista: %s", err)
+    uidoc.Selection.SetElementIds(List[DB.ElementId](encontrados))
+    con_vista, sin_vista = _encuadrables(doc, encontrados)
+    if con_vista:
+        try:
+            uidoc.ShowElements(List[DB.ElementId](con_vista))
+        except Exception as err:
+            logger.debug("No se pudo encuadrar la vista: %s", err)
 
     dialogos.avisar("Hallazgo seleccionado en el modelo.",
-                    _informe(encontrados, faltantes),
+                    _informe(encontrados, faltantes, sin_vista),
                     advertencia=bool(faltantes))
 
 

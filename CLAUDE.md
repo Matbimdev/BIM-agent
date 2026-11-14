@@ -111,27 +111,33 @@ Cada tool nueva se entrega con un fixture en `samples/payloads/` y un test que c
 Verificacion manual de una tool: `scripts/smoke.py <tool> <args>` contra un modelo abierto,
 antes de darla por cerrada.
 
-## 6. Estado (2026-11-11)
+## 6. Estado (2026-11-14)
 
 Roadmap y siguientes pasos en `docs/04-roadmap.md`. Empezar cada sesion por ahi.
 
-Las 10 herramientas estan implementadas y todas respondieron contra Revit 2026 con Snowdon
-(2026-11-01). Validado con datos reales: radiografia (1.450 elementos de modelo), warnings (2),
-planos (12) y vistas no colocadas (55), familias (44 no usadas, 102 no evaluadas), nomenclatura,
-parametros (`Mark` vacio en 74 columnas), vinculos y puntos base, metrado de Floors
-(6.513,544 m2 en 27 pisos) y Excel.
+F0 a F5 cerradas. Las 10 herramientas responden con Snowdon en Revit 2026 y 2027 (1.450
+elementos de modelo, warnings 2, 12 planos). Contrastadas contra Revit el 11/11: metrado de
+Floors igual a la tabla de planificacion (CA-04), familias no usadas con Select All Instances y
+Purge (CP-06), vinculos sin fijar y CAD importado (CP-09). Panel `BIMAgent.tab` con
+Iniciar/Detener, Estado y Seleccionar. 87 tests sin Revit.
 
-Pendiente de contrastar con Revit: metrado de Floors contra una tabla de planificacion
-(tolerancia 0,5%), familias no usadas con `Select All Instances`, reglas de vinculos con un
-vinculo sin fijar y un CAD importado en una copia del modelo.
+Siguiente: F6, validacion. No hay prueba con otros usuarios: se valida con 2 o 3 casos de uso
+reales del autor reproducidos sobre Snowdon y cronometrados contra una linea base manual, y el
+sesgo de autor se declara como limitacion.
 
 Limitaciones declaradas: no se audita el posicionamiento por coordenadas compartidas; el metrado
-incluye todas las fases; las familias usadas solo como referencia de tipo pueden salir como no
-usadas; el score de salud usa pesos y limites provisionales sin calibrar.
+incluye todas las fases; `audit_families` opina sobre 83 de 185 familias y calla sobre las que
+se usan desde un tipo; el score de salud es una heuristica provisional sin calibrar y sus
+conteos de familias y vistas no escalan con el tamano del modelo.
 
-Revit 2027 validado (2026-11-11): las 10 herramientas responden con Snowdon y los mismos resultados.
-Con dos versiones abiertas, pyRevit asigna el siguiente puerto libre (48885) a la segunda; el MCP hoy solo usa 48884.
+Puertos: pyRevit da a cada Revit abierto el siguiente puerto libre; `revit_client.py` busca el
+bridge del 48884 al 48890 y usa el que tenga documento abierto. `scripts/smoke.py` solo usa 48884.
 
-Leccion IronPython: `.Name` falla en tipos como `FamilySymbol` o `RevitLinkType` (cualquier `ElementType`); usar `serializers.element_name`
-(`Element.Name.GetValue`). Los tests sin Revit no detectan estos errores: validar cada endpoint
-nuevo con `scripts/smoke.py` o por MCP contra el modelo.
+Datos: solo Snowdon en fixtures, Excel de ejemplo y capturas; nada de modelos de clientes.
+Nunca versionar `Encuesta.csv`, `entregables/`, `rubricas/` ni `.rvt`.
+
+Leccion IronPython: `.Name` falla en tipos como `FamilySymbol` o `RevitLinkType` (cualquier
+`ElementType`); usar `serializers.element_name` (`Element.Name.GetValue`). En el panel, bajo
+CPython (Revit 2027) `pyrevit.forms` no existe: usar `TaskDialog`. Los tests sin Revit no
+detectan estos errores: validar cada endpoint nuevo con `scripts/smoke.py` o por MCP contra el
+modelo.

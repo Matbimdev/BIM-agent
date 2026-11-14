@@ -1,6 +1,6 @@
 # Roadmap
 
-Entrega del MVP: 17/11/2026. Actualizado el 2026-11-11.
+Entrega del MVP: 17/11/2026. Actualizado el 2026-11-14.
 
 ## F0 a F4 - Construccion (cerradas 01/11)
 - [x] Estructura, contrato de las 10 herramientas y ADR-001 a ADR-006
@@ -10,7 +10,7 @@ Entrega del MVP: 17/11/2026. Actualizado el 2026-11-11.
 - [x] Correcciones de campo: categorias no modelo, ElementId en muestras, familias no usadas, `Element.Name`
 - [x] Repositorio privado en GitHub
 
-## F5 - Cierre tecnico (12 y 13/11)
+## F5 - Cierre tecnico (cerrada 11/11)
 - [x] Revit 2027 validado el 11/11: las 10 herramientas responden con Snowdon (1.450 elementos, metrado de Floors 6.513,544 m2, igual que en 2026; score 71). La falla anterior era de puerto: con Revit 2026 abierto primero, pyRevit asigna 48885 a 2027 y el MCP solo busca 48884
 - [x] Robustez: si 48884 no responde o no tiene modelo, `revit_client.py` prueba `/health` en 48884 a 48890 y reintenta en el que tenga documento abierto (6 tests nuevos, 63 en total)
 - [x] 56 vistas no colocadas en 2027 contra 55 en 2026: no es diferencia de version, es el
@@ -75,13 +75,15 @@ Entrega del MVP: 17/11/2026. Actualizado el 2026-11-11.
 
 ## F6 - Validacion (14 y 15/11)
 - [ ] Linea base: auditoria manual cronometrada sobre Snowdon con las mismas reglas
-- [ ] Prueba con 2 o 3 usuarios: tiempo, cobertura y comentarios
+- [ ] 2 o 3 casos de uso reales del autor, reproducidos sobre Snowdon y cronometrados contra
+      la linea base. Sin prueba con otros usuarios: el MCP no se comparte, y el sesgo de autor
+      se declara como limitacion
 - [ ] Medir CA-01 a CA-06 y registrar errores y correcciones
 - [ ] Video de demostracion continua de 3 a 5 minutos
 
 ## F7 - Entrega (16 y 17/11)
 - [ ] Ficha tecnica: instalacion, dependencias, uso, datos de prueba, restricciones y reproduccion
-- [ ] Instalacion por un tercero en otra maquina
+- [ ] Instalacion por un tercero en otra maquina (pendiente de decidir: o instalacion limpia en otro usuario de Windows)
 - [ ] Quitar referencias academicas de `docs/02` y `docs/03`
 
 MVP indispensable: herramientas 1, 4, 5, 6, 7, 8 y 10.

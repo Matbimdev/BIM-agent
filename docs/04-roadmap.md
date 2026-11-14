@@ -77,9 +77,10 @@ Entrega del MVP: 17/11/2026. Actualizado el 2026-11-14.
 - [x] Linea base, 14/11, sobre Snowdon 2026 con 6 vinculos RVT y dos DWG: 15 reglas, 55:05 a mano
       contra 38 s del agente. Mismos hallazgos en 13 reglas; en FAM-002 (44 contra 37) y VIS-001
       (36 contra 35) el manual conto de menos. Detalle en `docs/09-f6-validacion.md`
-- [ ] 2 o 3 casos de uso reales del autor, reproducidos sobre Snowdon y cronometrados contra
-      la linea base. Sin prueba con otros usuarios: el MCP no se comparte, y el sesgo de autor
-      se declara como limitacion
+- [x] 2 casos de uso del autor, 14/11, grabados: metrado de concreto (CU-1) y vigas de L2 TOS
+      con Cut Length mayor a 18' (CU-2). Mismos resultados que a mano, diferencias de 0,01 m3 por
+      redondeo; 02:15 con el agente, escribiendo las preguntas, contra 03:18 a mano. Sin prueba
+      con otros usuarios: el MCP no se comparte, y el sesgo de autor se declara como limitacion
 - [x] CA-01 a CA-06 cumplen, 14/11. CA-03 encontro dos errores, corregidos: el aviso "No good
       view could be found" del panel y VIN-003 apuntando al tipo del vinculo. 90 tests
 - [ ] Video de demostracion continua de 3 a 5 minutos

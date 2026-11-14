@@ -150,3 +150,56 @@ Repeticion tras el arreglo (14/11, pyRevit recargado, vinculos visibles en 3D): 
 vinculo Architectural, familia Anchor Tag y muro Concrete 18" pegados juntos. Sin aviso de Revit;
 informe "Seleccionados: 3, 1 sin vista para encuadrar"; el filtro de seleccion muestra Other 1,
 RVT Links 1 y Walls 1, y el vinculo se ve resaltado en la vista 3D.
+
+## Casos de uso del autor
+
+Dos tareas del trabajo real del autor, elegidas el 14/11, reproducidas sobre el mismo modelo.
+Se fijan antes de cronometrar y no se cambian. Primero el recorrido manual, despues el agente.
+
+A diferencia de la linea base, el agente se cronometra como lo usaria una persona: el autor
+escribe la pregunta en Claude Code y para el cronometro cuando tiene la respuesta en pantalla.
+Los dos recorridos se graban en pantalla, Revit y Claude Code lado a lado, como evidencia.
+Ese tiempo incluye escribir el pedido, y responde a la salvedad de CA-01.
+
+### CU-1. Metrado de concreto para presupuesto
+
+Pregunta: "Volumen de concreto de cimentaciones por tipo y de muros por tipo y nivel, en m3."
+
+- Manual: dos tablas de planificacion. Structural Foundations con Type, Count y Volume, sin
+  itemizar. Walls con Type, Base Constraint y Volume, agrupada por tipo y nivel. Sin filtro de
+  fase, como en CA-04. Anotar total y subtotales.
+- Agente: `get_quantities` de Structural Foundations por tipo y de Walls por tipo y nivel.
+- Criterio: diferencia menor a 0,5% por grupo (el mismo de CA-04).
+
+### CU-2. Busqueda dirigida
+
+Pregunta: "Que vigas del nivel L2 TOS tienen un Cut Length mayor a 18'."
+
+Primera version descartada el 14/11: "vigas de L2 sin Mark". Ninguna viga de L2 tiene Mark, asi
+que la respuesta era "todas" y no exigia filtrar. Se cambio antes de cronometrar al agente,
+primero a 7' y luego a 18', por decision del autor. El nivel paso de L2 a L2 TOS, que es el
+Reference Level de las vigas en Snowdon; con "L2" la herramienta compara exacto y daria 0.
+
+- Manual: tabla de Structural Framing con Reference Level, Type y Cut Length, filtrada por L2 y
+  Cut Length mayor que 18'. Anotar cuantas.
+- Agente: `query_elements` de Structural Framing, nivel L2, filtro Cut Length gt. La herramienta
+  compara en metros: el agente debe convertir 18' a 5,4864 m sin que se lo digan.
+- Criterio: mismo conteo; el agente entrega UniqueId para `Seleccionar`. Una viga de 18' justos
+  no entra en ninguno de los dos (mayor estricto).
+
+| Caso | Manual (mm:ss) | Resultado manual | Agente (mm:ss) | Resultado agente | Diferencia |
+|------|----------------|------------------|----------------|------------------|------------|
+| CU-1 cimentaciones | 02:22 (las dos tablas) | 90 elementos, 361,62 m3: 24x24x20' 14 / 22,51; 24x24x25' 28 / 59,28; 30x30x25' 22 / 76,34; 36x36x24 Pile_24 12 / 6,12; 36x36x24 Pile_30 1 / 0,51; Bearing Footing - 36 9 / 56,88; FNDN-36 4 / 139,98 | 02:15 (las tres preguntas) | 90 elementos, 361,62 m3, 7 tipos. Igual al manual salvo 30x30x25': 76,35 contra 76,34 | 0,01 m3 (0,013%) por redondeo de la tabla a dos decimales. Cumple el 0,5% en los 7 grupos |
+| CU-1 muros | incluido arriba | 58 muros, 1.164,94 m3. Elevator Pit 13 / 121,75 (10" 14,62; 12" 47,03; 18" 26,97; 24" 33,14). Top of Footing 18 / 404,81 (12" 30,81; 18" 40,72; 24" 333,28). L1_35_Low 5 / 77,74 (10" 45,69; 12" 32,04). L1_37_Med 5 / 72,96 (10" 56,79; 12" 16,17). L1_43_High 17 / 487,69 (12" 295,00; 18" 184,18; 24" 8,51) | incluido arriba | 58 muros, 1.164,94 m3, 4 tipos en 5 niveles. Mismos conteos por nivel. Igual al manual salvo Concrete 10" en L1_35_Low: 45,70 contra 45,69 | 0,01 m3 (0,02%) por redondeo. Cumple el 0,5% en los 14 grupos |
+| CU-2 | 00:56 (grabacion 2:22 a 3:18) | 28 vigas con Reference Level L2 TOS: 17 16K6 de 22'-3" y 11 W18x55 entre 18'-8" y 27'-10" | incluido arriba | 28 vigas: 17 16K6 y 11 W18x55. Convirtio 18 ft a 5,486 m sin que se lo pidieran | Igual |
+
+Agente: 14/11, sesion nueva de Claude Code con Opus 5.5 en esfuerzo medio, grabada junto a
+Revit. 02:15 desde escribir la primera pregunta hasta la ultima respuesta, contra 03:18 a mano
+(02:22 de CU-1 mas 00:56 de CU-2). El autor redacto las preguntas a su manera: CU-1 en dos
+mensajes (cimentaciones y muros) y CU-2 como "total de vigas del nivel L2 TOS con Cut Length
+mayor a 18 pies". El contenido es el del protocolo.
+
+Lo que el agente agrego sin que se lo pidieran: separo las 17 viguetas 16K6 de los 11 perfiles W;
+aviso que el metrado suma todas las fases; y marco que los dos tipos Pile dan unos 0,5 m3 por
+unidad, posible senal de que el volumen cuenta solo el cabezal, y recomendo contrastarlo con la
+tabla antes de presupuestar.

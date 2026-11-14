@@ -1,5 +1,7 @@
 # BIM Agent - Ficha tecnica
 
+Autor y titular del codigo: Luis Mateo Lopez Rios. Contacto: lmateolopezr@gmail.com.
+
 Agente que conversa con un modelo de Revit abierto mediante un servidor MCP. Lee, mide, audita y
 reporta; nunca modifica el modelo. El usuario pregunta en lenguaje natural en Claude, el agente
 consulta el modelo, aplica las reglas de auditoria y entrega un Excel con hallazgos trazables a

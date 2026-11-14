@@ -64,13 +64,13 @@ Estado: aceptada
 
 Contexto: el bridge escucha en localhost y cualquier proceso local podria consultar el modelo.
 Lo estandar es enviar un token en la cabecera `Authorization`, pero pyRevit Routes de serie no
-reenvia las cabeceras HTTP a las rutas. El laboratorio lo resolvio parcheando
-`routes/server/server.py` de pyRevit, parche que se pierde al actualizar pyRevit.
+reenvia las cabeceras HTTP a las rutas. Una extension de referencia de la comunidad lo resuelve
+parcheando `routes/server/server.py` de pyRevit, parche que se pierde al actualizar pyRevit.
 
 Decision: todos los endpoints del bridge son POST y reciben `{"token": "...", "args": {...}}`.
 El bridge genera el token al arrancar en `%APPDATA%\BIMAgent\token` si no existe; el
 `mcp-server` lo lee del mismo archivo. Token invalido o ausente responde 401 con mensaje util.
 La API se registra como `bim-agent` para convivir con otras extensiones en el mismo servidor Routes.
 
-Consecuencia: funciona con pyRevit sin modificar y no depende del parche del laboratorio.
+Consecuencia: funciona con pyRevit sin modificar y no depende de ese parche.
 A cambio es menos estandar y hasta `/health` exige POST con token.

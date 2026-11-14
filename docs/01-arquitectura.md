@@ -38,20 +38,31 @@ servidor MCP no cambia.
 | Serializacion | `revit-bridge/.../lib/bim_agent_bridge/serializers.py` | Element a diccionario plano; conversion unica desde pies internos de Revit |
 | Panel | `revit-bridge/BIMAgent.extension/BIMAgent.tab/` | Botones `Iniciar/Detener`, `Estado` y `Seleccionar` dentro de Revit |
 
-## 3. Herramientas y rutas del bridge
+## 3. Donde esta el codigo de cada herramienta
 
-| Herramienta | Ruta | Logica en el servidor |
-|---|---|---|
-| `get_model_overview` | `/overview` | Excluye categorias que no son de modelo, ordena y trunca |
-| `query_elements` | `/elements` | Filtros por nivel, tipo y parametro (`eq`, `gt`, `empty`, ...) |
-| `get_quantities` | `/quantities` | Agrupa por tipo, nivel o fase y suma con unidad |
-| `get_sheets_and_views` | `/sheets_views` | Separa vistas exigibles de informativas (regla VIS-001) |
-| `get_warnings` | `/warnings` | Agrupa por descripcion y calcula warnings por cada 1000 elementos |
-| `audit_families` | `/families` | Reglas FAM-001 a FAM-004 |
-| `audit_naming` | `/names` | Aplica el patron que el usuario confirmo |
-| `audit_parameters` | `/elements` | Obligatorios faltantes, vacios o fuera de una lista o patron |
-| `audit_links_coordinates` | `/links_coordinates` | Reglas VIN-001 a VIN-006 |
-| `export_report` | ninguna | Excel con resumen, hoja por regla, trazabilidad y score; no consulta Revit |
+Cada herramienta tiene dos partes: la logica en el servidor MCP y la extraccion en el bridge.
+Las 10 se registran en `mcp-server/src/bim_agent_mcp/server.py`, y las rutas del bridge en
+`revit-bridge/BIMAgent.extension/startup.py`.
+
+Rutas abreviadas: `tools/` es `mcp-server/src/bim_agent_mcp/tools/` y `handlers/` es
+`revit-bridge/BIMAgent.extension/lib/bim_agent_bridge/handlers/`.
+
+| # | Herramienta | Logica (servidor MCP) | Extraccion (bridge, ruta) | Que hace el servidor |
+|---|---|---|---|---|
+| 1 | `get_model_overview` | `tools/get_model_overview.py` | `handlers/overview.py`, `/overview` | Excluye categorias que no son de modelo, ordena y trunca |
+| 2 | `query_elements` | `tools/query_elements.py` | `handlers/elements.py`, `/elements` | Filtros por nivel, tipo y parametro (`eq`, `gt`, `empty`, ...) |
+| 3 | `get_quantities` | `tools/get_quantities.py` | `handlers/elements.py`, `/quantities` | Agrupa por tipo, nivel o fase y suma con unidad |
+| 4 | `get_sheets_and_views` | `tools/get_sheets_and_views.py` | `handlers/sheets_views.py`, `/sheets_views` | Separa vistas exigibles de informativas (regla VIS-001) |
+| 5 | `get_warnings` | `tools/get_warnings.py` | `handlers/warnings.py`, `/warnings` | Agrupa por descripcion y calcula warnings por cada 1000 elementos |
+| 6 | `audit_families` | `tools/audit_families.py` | `handlers/families.py`, `/families` | Reglas FAM-001 a FAM-004 |
+| 7 | `audit_naming` | `tools/audit_naming.py` | `handlers/names.py`, `/names` | Aplica el patron que el usuario confirmo |
+| 8 | `audit_parameters` | `tools/audit_parameters.py` | `handlers/elements.py`, `/elements` | Obligatorios faltantes, vacios o fuera de una lista o patron |
+| 9 | `audit_links_coordinates` | `tools/audit_links_coordinates.py` | `handlers/links_coordinates.py`, `/links_coordinates` | Reglas VIN-001 a VIN-006 |
+| 10 | `export_report` | `tools/export_report.py` | ninguna: no consulta Revit | Excel con resumen, hoja por regla, trazabilidad y score |
+
+Comun a todas: `tools/common.py` (envoltura con truncado y filas del Excel), `revit_client.py`
+(conexion al bridge) y, en el bridge, `serializers.py` (conversion de unidades y nombres).
+Tests de cada herramienta: `mcp-server/tests/`.
 
 Contrato completo de entradas y salidas: `docs/02-contrato-herramientas.md`.
 

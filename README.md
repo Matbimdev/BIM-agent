@@ -72,22 +72,26 @@ Los pasos 2 a 4 se pueden repetir sin riesgo: si ya estaban hechos, quedan igual
 4. Para ver un hallazgo en el modelo, copia sus UniqueId de la columna del Excel y pulsa
    `Seleccionar` en el panel.
 
-Las 10 herramientas:
+Las 10 herramientas. El codigo de cada una esta en `mcp-server/src/bim_agent_mcp/tools/`, en un
+archivo con su mismo nombre:
 
-| # | Herramienta | Que responde |
-|---|---|---|
-| 1 | `get_model_overview` | Proyecto, unidades, conteo por categoria, niveles, fases, worksets y vinculos. Va primero |
-| 2 | `query_elements` | Elementos por categoria, nivel, tipo o valor de parametro |
-| 3 | `get_quantities` | Metrado por tipo, nivel o fase, con unidad |
-| 4 | `get_sheets_and_views` | Planos, vistas colocadas y vistas sin colocar |
-| 5 | `get_warnings` | Warnings agrupados por descripcion, con elementos de muestra |
-| 6 | `audit_families` | Familias in-place, sin usar, duplicadas o con exceso de tipos |
-| 7 | `audit_naming` | Nombres contra un patron derivado del BEP; el agente lo muestra y el usuario lo confirma |
-| 8 | `audit_parameters` | Parametros obligatorios faltantes, vacios o invalidos |
-| 9 | `audit_links_coordinates` | Vinculos RVT/IFC/CAD y punto base |
-| 10 | `export_report` | Excel con hallazgos, trazabilidad y score de salud |
+| # | Herramienta | Codigo | Que responde |
+|---|---|---|---|
+| 1 | `get_model_overview` | `tools/get_model_overview.py` | Proyecto, unidades, conteo por categoria, niveles, fases, worksets y vinculos. Va primero |
+| 2 | `query_elements` | `tools/query_elements.py` | Elementos por categoria, nivel, tipo o valor de parametro |
+| 3 | `get_quantities` | `tools/get_quantities.py` | Metrado por tipo, nivel o fase, con unidad |
+| 4 | `get_sheets_and_views` | `tools/get_sheets_and_views.py` | Planos, vistas colocadas y vistas sin colocar |
+| 5 | `get_warnings` | `tools/get_warnings.py` | Warnings agrupados por descripcion, con elementos de muestra |
+| 6 | `audit_families` | `tools/audit_families.py` | Familias in-place, sin usar, duplicadas o con exceso de tipos |
+| 7 | `audit_naming` | `tools/audit_naming.py` | Nombres contra un patron derivado del BEP; el agente lo muestra y el usuario lo confirma |
+| 8 | `audit_parameters` | `tools/audit_parameters.py` | Parametros obligatorios faltantes, vacios o invalidos |
+| 9 | `audit_links_coordinates` | `tools/audit_links_coordinates.py` | Vinculos RVT/IFC/CAD y punto base |
+| 10 | `export_report` | `tools/export_report.py` | Excel con hallazgos, trazabilidad y score de salud |
 
-El contrato completo de entradas y salidas esta en `docs/02-contrato-herramientas.md`.
+Las 10 se registran en `mcp-server/src/bim_agent_mcp/server.py`. La parte que lee Revit esta en
+`revit-bridge/BIMAgent.extension/lib/bim_agent_bridge/handlers/`; la correspondencia de cada
+herramienta con su archivo del bridge esta en `docs/01-arquitectura.md`, seccion 3. El contrato
+de entradas y salidas esta en `docs/02-contrato-herramientas.md`.
 
 ## 5. Datos
 

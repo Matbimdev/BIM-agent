@@ -10,6 +10,15 @@ Archivo de F6: `PROYECTO/Snowdon Towers Sample Structural.rvt` (ignorado por git
 clientes; reemplaza a un DWG del trabajo que se retiro del modelo). Verificado el 14/11
 al reabrir: `IsModified` falso, 1.458 elementos.
 
+Tamano del modelo, para leer los tiempos manuales. Archivo de 26,5 MB, sin worksharing.
+1.458 elementos de modelo: 942 Structural Framing, 91 Generic Models, 90 Structural Foundations,
+76 Structural Beam Systems, 74 Structural Columns, 70 Structural Connections, 58 Walls, 27 Floors,
+14 Structural Rebar, 7 Areas, 1 Shaft Opening, 6 vinculos RVT y 2 DWG. Ademas 1.287 elementos que
+no son de modelo (bocetos, materiales, planos y similares). 185 familias cargadas, 19 niveles,
+2 fases, 12 planos con 16 vistas colocadas y 55 vistas sin colocar, 2 warnings. Es un modelo
+estructural chico o mediano: la revision manual se lleva casi todo su tiempo en familias
+(185 en el navegador, 7:10) y vistas (71, 8:00), no en elementos.
+
 Efecto conocido: `get_model_overview` cuenta `RVT Links` y cada DWG como elementos de modelo,
 asi que el denominador de los warnings por mil sube (pendiente en F5 del roadmap).
 

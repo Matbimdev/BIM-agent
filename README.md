@@ -12,8 +12,8 @@ cada elemento por su UniqueId.
 | Recurso | Dónde |
 |---|---|
 | Código | https://github.com/Matbimdev/BIM-agent |
-| Video de respaldo (demo de 3 a 5 min) | _enlace pendiente_ |
-| Anexo: casos de uso cronometrados | _enlace pendiente_ |
+| Video de respaldo (demo del flujo principal) | https://drive.google.com/file/d/1tYXNdJOJGT_ft9GL7w2tXlGk007zZ82k/view?usp=sharing |
+| Anexo: casos de uso cronometrados (manual contra agente) | https://drive.google.com/file/d/12MmK6Pq9MNsmJqYx-pT0gmnrsvQyFba1/view?usp=sharing |
 
 Repositorio privado; el autor lo abre como público el día de la entrega, para su evaluación.
 Licencia propietaria: ver `LICENSE`.
@@ -113,12 +113,16 @@ de entradas y salidas está en `docs/02-contrato-herramientas.md`.
 - Puertos: pyRevit da a cada Revit abierto el siguiente puerto libre. El servidor busca el bridge
   del 48884 al 48890 y usa el que tenga un modelo abierto. `scripts/smoke.py` solo usa el 48884.
 - Seguridad: cada pedido al bridge lleva un token local guardado en `%APPDATA%\BIMAgent\token`.
-- Respuestas truncadas: las listas se cortan en 100 o 200 elementos y lo declaran con
-  `truncated`, `total` y `returned`.
+- Respuestas truncadas: ninguna herramienta devuelve el modelo entero. `query_elements` corta en
+  100 elementos (máximo 500), las auditorías, el metrado y las vistas en 200, `get_warnings` en
+  20 grupos y `get_model_overview` en 60 categorías. Toda respuesta cortada lo declara con
+  `truncated`, `total`, `returned` y un `hint` que dice cómo ver el resto.
 - No audita el posicionamiento por coordenadas compartidas.
 - El metrado suma todas las fases.
-- `audit_families` opina sobre 83 de las 185 familias de Snowdon. No dice nada de las que se
-  usan desde un tipo (perfiles, cabezas de nivel); para esas, el complemento es Purge Unused.
+- La regla de familias sin usar (FAM-002) opina sobre 83 de las 185 familias de Snowdon. No dice
+  nada de las 102 que se usan desde un tipo (formas de armadura, perfiles, cabezas de nivel);
+  para esas, el complemento es Purge Unused. Las demás reglas de familias (in-place, duplicadas
+  y exceso de tipos) revisan las 185.
 - El score de salud es una heurística provisional sin calibrar: sirve para comparar un mismo
   modelo en el tiempo, no modelos distintos.
 - `get_model_overview` cuenta cada vínculo RVT y cada DWG como elemento de modelo.

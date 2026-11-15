@@ -15,6 +15,9 @@ talleres/
 images/
 *.csv
 
+# Configuracion local de otras herramientas
+.codex/
+
 # Modelos de Revit
 samples/models/
 *.rvt

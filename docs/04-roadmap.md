@@ -54,8 +54,8 @@ Entrega del MVP: 17/11/2026. Actualizado el 2026-11-14.
       warnings por mil
 - [x] Panel pyRevit minimo, probado en Revit 2027 el 11/11: `BIMAgent.tab/Auditoria.panel`
       con `Iniciar/Detener` (alterna el bridge), `Estado` (bridge, puerto, modelo y version)
-      y `Seleccionar` (selecciona por UniqueId pegado desde el reporte). Pantalla P1 del
-      Hito 2; cierra los pasos 1 y 9 del flujo de usuario y hace medible CA-03.
+      y `Seleccionar` (selecciona por UniqueId pegado desde el reporte). Cierra los pasos 1 y 9
+      del flujo de usuario y hace medible CA-03.
       Dos decisiones de implementacion: el panel no usa `pyrevit.forms`, que bajo CPython
       (Revit 2027) lanza `PyRevitCPythonNotSupported` en todos sus atributos, sino
       `TaskDialog` de la API de Revit; y `Estado` no llama a `/health` por HTTP, porque
@@ -84,11 +84,18 @@ Entrega del MVP: 17/11/2026. Actualizado el 2026-11-14.
       con otros usuarios: el MCP no se comparte, y el sesgo de autor se declara como limitacion
 - [x] CA-01 a CA-06 cumplen, 14/11. CA-03 encontro dos errores, corregidos: el aviso "No good
       view could be found" del panel y VIN-003 apuntando al tipo del vinculo. 90 tests
-- [ ] Video de demostracion continua de 3 a 5 minutos
+- [x] Video de demostracion, 14/11: una sola toma de 5:24 con las 10 herramientas, de la
+      radiografia a `Seleccionar` un hallazgo en Revit, sin cortes. Pasa 24 s del maximo de 5:00
+      y se deja asi por decision del autor. El enlace y el del anexo de los casos de uso estan en
+      el README
 
 ## F7 - Entrega (16 y 17/11)
-- [ ] Ficha tecnica: instalacion, dependencias, uso, datos de prueba, restricciones y reproduccion
-- [ ] Instalacion por un tercero en otra maquina (pendiente de decidir: o instalacion limpia en otro usuario de Windows)
-- [ ] Quitar referencias academicas de `docs/02` y `docs/03`
+- [x] Ficha tecnica: `README.md` (instalacion, dependencias, uso, datos de prueba, restricciones
+      y reproduccion) y su PDF, 14/11. Los enlaces al video y al anexo ya estan puestos
+- [x] Quitar referencias academicas de `docs/02`, `docs/03` y `docs/04`, 14/11
+- [ ] Presentacion final, 10 a 15 diapositivas, en PDF y editable
+- [ ] Hacer publico el repositorio el 17/11 y subir la entrega a Classroom
+- [ ] Opcional: instalacion limpia en otro usuario de Windows. El instalador `install.bat` es
+      local y no se versiona; el README documenta los mismos pasos a mano
 
 MVP indispensable: herramientas 1, 4, 5, 6, 7, 8 y 10.

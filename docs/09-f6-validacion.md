@@ -106,8 +106,19 @@ de punta a punta sale del video.
   La lista de Deshacer de Revit muestra dos operaciones de interfaz: "Modify Schedule/Quantities"
   y "Modify element attributes", de la prueba manual de CA-03 con tablas y vistas en Propiedades.
   No vienen del agente, que no abre transacciones.
-- PAR-1 da 0 de 942. El Hito 2 (CP-08) esperaba 48 elementos estructurales sin material en
-  Snowdon. Revisar de donde sale ese 48 antes de citarlo en el PPT.
+- PAR-1 da 0 de 942 vigas sin `Structural Material`. Una expectativa previa hablaba de 48
+  elementos estructurales sin material en Snowdon. Revisado el 14/11 con `audit_parameters` y
+  `Structural Material`: vigas 0 de 942, cimentaciones 0 de 90, pisos 0 de 27, muros 0 de 58 y
+  columnas 20 de 74 vacios, todas `SC_Reference Column` del nivel Parapet 2. En ninguna categoria
+  sale 48, asi que esa cifra no se reproduce y no se cita. El hallazgo real de la regla son las
+  20 columnas de referencia. Con el parametro `Material` en vigas salen 942 "missing" porque
+  ese parametro no existe en esa categoria: es un parametro mal elegido, no 942 vacios.
+- Pilotes. En CU-1 el agente advirtio que los tipos `Pile` dan unos 0,5 m3 por unidad y que
+  quiza el volumen cuenta solo el cabezal. Revisado el 14/11: los 13 elementos de `36x36x24
+  Pile_24` y `Pile_30` son de la familia `SFD_Pile_Cap_Rectangle`, o sea cabezales de 36x36x24
+  pulgadas (0,5097 m3 cada uno). Los pilotes estan en otros tipos: `24x24x25'` (28 elementos) es
+  `SFD_Round` con 2,15 m3 cada uno. El total de 361,62 m3 no esta subcontado: el nombre del tipo
+  engana, no el metrado. La sospecha del agente era razonable y quedo verificada.
 
 ## Errores y correcciones
 

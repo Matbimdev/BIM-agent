@@ -44,10 +44,9 @@ comunidad de 124 a 138 herramientas.
 Fecha: 2026-10-18
 Estado: aceptada
 
-Contexto: el feedback del Hito 1 pidio nombrar las diez herramientas con entrada, salida y
-regla. La lista original no cubria tres capacidades elegidas por 2 de 3 consultados
-(nomenclatura, parametros obligatorios, vinculos y coordenadas) y tenia un solapamiento
-(`find_elements` con `get_element_parameters`).
+Contexto: la lista original no cubria tres capacidades de auditoria (nomenclatura, parametros
+obligatorios, vinculos y coordenadas) y tenia un solapamiento (`find_elements` con
+`get_element_parameters`). Cada herramienta debe quedar con entrada, salida y regla.
 
 Decision: se fusionan `get_project_info` en `get_model_overview` y `find_elements` con
 `get_element_parameters` en `query_elements`. `audit_model_health` deja de ser herramienta y su

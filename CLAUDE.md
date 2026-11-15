@@ -115,20 +115,28 @@ antes de darla por cerrada.
 
 Roadmap y siguientes pasos en `docs/04-roadmap.md`. Empezar cada sesion por ahi.
 
-F0 a F5 cerradas. Las 10 herramientas responden con Snowdon en Revit 2026 y 2027 (1.450
+F0 a F6 cerradas. Las 10 herramientas responden con Snowdon en Revit 2026 y 2027 (1.450
 elementos de modelo, warnings 2, 12 planos). Contrastadas contra Revit el 11/11: metrado de
 Floors igual a la tabla de planificacion (CA-04), familias no usadas con Select All Instances y
 Purge (CP-06), vinculos sin fijar y CAD importado (CP-09). Panel `BIMAgent.tab` con
-Iniciar/Detener, Estado y Seleccionar. 87 tests sin Revit.
+Iniciar/Detener, Estado y Seleccionar. 90 tests sin Revit.
 
-Siguiente: F6, validacion. No hay prueba con otros usuarios: se valida con 2 o 3 casos de uso
-reales del autor reproducidos sobre Snowdon y cronometrados contra una linea base manual, y el
+F6 validada el 14/11 sobre una copia de Snowdon con 6 vinculos RVT y 2 DWG (1.458 elementos):
+15 reglas en 55:05 a mano contra 38 s del agente, CA-01 a CA-06 cumplen, y dos casos de uso
+grabados (3:18 a mano contra 2:15 con el agente). CA-03 encontro dos errores, ya corregidos: el
+aviso "No good view could be found" del panel y VIN-003 que apuntaba al tipo del vinculo en vez
+de a su instancia. Detalle en `docs/09-f6-validacion.md`. No hay prueba con otros usuarios: el
 sesgo de autor se declara como limitacion.
+
+Siguiente: F7, entrega el 17/11. Presentacion final en PDF y editable, repositorio publico y
+carga en Classroom. El README es la ficha tecnica; el video de demo y el anexo estan en Drive.
 
 Limitaciones declaradas: no se audita el posicionamiento por coordenadas compartidas; el metrado
 incluye todas las fases; la regla de familias sin usar (FAM-002) opina sobre 83 de 185 familias y
-calla sobre las que se usan desde un tipo (las otras reglas de familias revisan las 185); el score de salud es una heuristica provisional sin calibrar y sus
-conteos de familias y vistas no escalan con el tamano del modelo.
+calla sobre las que se usan desde un tipo (las otras reglas de familias revisan las 185); el
+score de salud es una heuristica provisional sin calibrar y sus conteos de familias y vistas no
+escalan con el tamano del modelo; `get_model_overview` cuenta cada vinculo RVT y cada DWG como
+elemento de modelo.
 
 Puertos: pyRevit da a cada Revit abierto el siguiente puerto libre; `revit_client.py` busca el
 bridge del 48884 al 48890 y usa el que tenga documento abierto. `scripts/smoke.py` solo usa 48884.

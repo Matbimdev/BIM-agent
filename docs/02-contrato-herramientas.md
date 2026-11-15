@@ -1,7 +1,7 @@
 # Contrato de herramientas
 
 Fuente de verdad de las 10 herramientas de la v1. El contrato manda sobre el codigo.
-Version 1.0, 2026-10-18. Lista revisada respecto del Hito 1, ver ADR-005 en `03-decisiones.md`.
+Version 1.0, 2026-10-18. Lista revisada, ver ADR-005 en `03-decisiones.md`.
 
 ## Convenciones comunes
 
@@ -18,24 +18,24 @@ Bridge: `POST http://localhost:48884/bim-agent/<endpoint>` con cuerpo `{"token":
 
 ## Resumen y trazabilidad
 
-| # | Herramienta | Regla que audita | Requisito | Evidencia que la sustenta |
+| # | Herramienta | Regla que audita | Requisito | Para que existe |
 |---|---|---|---|---|
-| 1 | `get_model_overview` | Ninguna, descubrimiento | RF-01 | Radiografia, unica capacidad elegida 3/3 |
-| 2 | `query_elements` | La que el usuario formule como filtro | RF-02 | Busqueda combinada 1/3; encargos de lectura |
-| 3 | `get_quantities` | Ninguna, metrado con criterio declarado | RF-03 | 32 encargos de metrados; 1/3 |
-| 4 | `get_sheets_and_views` | Toda vista de trabajo debe estar en un plano | RF-04 | Vistas no colocadas 1/3; planos desactualizados |
-| 5 | `get_warnings` | Warnings agrupados por tipo y severidad | RF-05 | Lo que se escapa (P1); 1/3 |
-| 6 | `audit_families` | Sin in-place, sin no usadas, sin duplicadas | RF-06 | 15 encargos de salud de modelo; 1/3 |
-| 7 | `audit_naming` | Nombres cumplen la convencion del BEP | RF-07 | 2/3 |
-| 8 | `audit_parameters` | Parametros obligatorios presentes, llenos y validos | RF-08 | 2/3 |
-| 9 | `audit_links_coordinates` | Vinculos cargados, fijados y en coordenadas compartidas | RF-09 | 2/3; 14 encargos de coordenadas |
-| 10 | `export_report` | Consolida hallazgos y calcula score de salud | RF-10 | Reporte Excel 3/3 |
+| 1 | `get_model_overview` | Ninguna, descubrimiento | RF-01 | Radiografia que orienta al agente antes de cualquier detalle |
+| 2 | `query_elements` | La que el usuario formule como filtro | RF-02 | Busqueda combinada y lectura de parametros |
+| 3 | `get_quantities` | Ninguna, metrado con criterio declarado | RF-03 | Metrados por tipo, nivel o fase |
+| 4 | `get_sheets_and_views` | Toda vista de trabajo debe estar en un plano | RF-04 | Vistas no colocadas y planos desactualizados |
+| 5 | `get_warnings` | Warnings agrupados por tipo y severidad | RF-05 | Ver lo que se escapa en el cuadro de advertencias |
+| 6 | `audit_families` | Sin in-place, sin no usadas, sin duplicadas | RF-06 | Salud de las familias del modelo |
+| 7 | `audit_naming` | Nombres cumplen la convencion del BEP | RF-07 | Convencion de nombres del proyecto |
+| 8 | `audit_parameters` | Parametros obligatorios presentes, llenos y validos | RF-08 | Parametros exigidos por el cliente o el BEP |
+| 9 | `audit_links_coordinates` | Vinculos cargados, fijados y en coordenadas compartidas | RF-09 | Vinculos y coordenadas entre disciplinas |
+| 10 | `export_report` | Consolida hallazgos y calcula score de salud | RF-10 | Reporte Excel con trazabilidad |
 
 ---
 
 ## 1. get_model_overview
 
-Proposito: orientar al agente antes de cualquier detalle. Llamada obligatoria al inicio de la sesion. Absorbe a `get_project_info` del Hito 1.
+Proposito: orientar al agente antes de cualquier detalle. Llamada obligatoria al inicio de la sesion. Absorbe a la antigua `get_project_info` (ADR-005).
 
 Entrada: `include_links: bool = true`.
 
@@ -58,7 +58,7 @@ Endpoint: `/overview`.
 
 ## 2. query_elements
 
-Proposito: buscar elementos por criterios combinados y leer sus parametros. Fusiona `find_elements` y `get_element_parameters` del Hito 1.
+Proposito: buscar elementos por criterios combinados y leer sus parametros. Fusiona las antiguas `find_elements` y `get_element_parameters` (ADR-005).
 
 Entrada:
 ```json
@@ -187,10 +187,10 @@ Endpoint: `/links_coordinates`.
 
 ## 10. export_report
 
-Proposito: entregar el resultado en el formato que pidieron los tres consultados. Corre completo en `mcp-server`; no llama al bridge. Exige `get_model_overview` en la sesion (`MissingOverview`).
+Proposito: entregar el resultado en un formato que se abre, filtra y comparte sin Revit: Excel. Corre completo en `mcp-server`; no llama al bridge. Exige `get_model_overview` en la sesion (`MissingOverview`).
 
 Entrada: `{"sections": ["warnings", "families", "naming", "parameters", "links", "sheets_views"], "format": "xlsx", "path": null}`. Usa los resultados cacheados de la sesion.
 
 Salida: `{"path": "C:/.../BIMAgent_Auditoria_<modelo>_<fecha>.xlsx", "sheets": ["Resumen", "Warnings", "..."], "health_score": {"value": 72, "max": 100, "components": [{"name": "warnings_por_1000", "value": 44, "weight": 0.25, "points": 15}]}}`.
 Estructura del Excel: hoja `Resumen` (modelo, fecha, score y sus componentes, reglas aplicadas); una hoja por regla con columnas `Regla`, `Texto de la regla`, `UniqueId`, `ElementId`, `Elemento`, `Categoria`, `Nivel`, `Valor encontrado`, `Valor esperado`; hoja `Trazabilidad` con cada llamada (herramienta, argumentos, hora).
-Score de salud: heuristica con pesos declarados en `config.py` (warnings por 1000 elementos, familias in-place, familias no usadas, vistas no colocadas exigibles, CAD importados, hallazgos de vinculos). Reemplaza a `audit_model_health` del Hito 1. Es una heuristica provisional: pesos y limites no estan calibrados, los conteos de familias y vistas son absolutos y no escalan con el tamano del modelo, y sirve para comparar un mismo modelo en el tiempo, no modelos distintos entre si. Referencia: Snowdon Structural limpio da 76. Si faltan datos de algun componente, el score se calcula con los disponibles, se reparte el peso entre ellos y la salida lo declara con `complete: false` y `missing_components`. Las secciones sin datos en la sesion se devuelven en `sections_missing`; nunca se inventan.
+Score de salud: heuristica con pesos declarados en `config.py` (warnings por 1000 elementos, familias in-place, familias no usadas, vistas no colocadas exigibles, CAD importados, hallazgos de vinculos). Reemplaza a la antigua `audit_model_health` (ADR-005). Es una heuristica provisional: pesos y limites no estan calibrados, los conteos de familias y vistas son absolutos y no escalan con el tamano del modelo, y sirve para comparar un mismo modelo en el tiempo, no modelos distintos entre si. Referencia: Snowdon Structural limpio da 76. Si faltan datos de algun componente, el score se calcula con los disponibles, se reparte el peso entre ellos y la salida lo declara con `complete: false` y `missing_components`. Las secciones sin datos en la sesion se devuelven en `sections_missing`; nunca se inventan.

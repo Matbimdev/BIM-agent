@@ -24,8 +24,9 @@ Entrega del MVP: 17/11/2026. Actualizado el 2026-11-14.
       0,5% que exige el criterio, y proviene de reconvertir a ft2 un valor que el MCP
       ya redondeo a tres decimales en m2. Evidencia en
       `samples/payloads/quantities_floors_snowdon.json`
-- [x] Familias no usadas contrastadas el 11/11 en Revit 2027. En simple: la herramienta
+- [x] Familias no usadas contrastadas el 11/11 en Revit 2027. En simple: la regla FAM-002
       opina sobre 83 de las 185 familias del modelo; de esas, 44 estan sin usar y 39 en uso.
+      Las demas reglas de familias (in-place, duplicadas, exceso de tipos) revisan las 185.
       Sobre las otras 102 (formas de armadura, perfiles, cabezas de nivel y similares, que
       se usan desde un tipo y no se colocan) no dice nada. De las 44 que reporta
       `audit_families`, 41 estan en categorias sin ningun elemento en el modelo y se

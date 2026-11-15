@@ -126,8 +126,8 @@ reales del autor reproducidos sobre Snowdon y cronometrados contra una linea bas
 sesgo de autor se declara como limitacion.
 
 Limitaciones declaradas: no se audita el posicionamiento por coordenadas compartidas; el metrado
-incluye todas las fases; `audit_families` opina sobre 83 de 185 familias y calla sobre las que
-se usan desde un tipo; el score de salud es una heuristica provisional sin calibrar y sus
+incluye todas las fases; la regla de familias sin usar (FAM-002) opina sobre 83 de 185 familias y
+calla sobre las que se usan desde un tipo (las otras reglas de familias revisan las 185); el score de salud es una heuristica provisional sin calibrar y sus
 conteos de familias y vistas no escalan con el tamano del modelo.
 
 Puertos: pyRevit da a cada Revit abierto el siguiente puerto libre; `revit_client.py` busca el

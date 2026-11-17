@@ -15,7 +15,7 @@ cada elemento por su UniqueId.
 | Video de respaldo (demo del flujo principal) | https://drive.google.com/file/d/1tYXNdJOJGT_ft9GL7w2tXlGk007zZ82k/view?usp=sharing |
 | Anexo: casos de uso cronometrados (manual contra agente) | https://drive.google.com/file/d/12MmK6Pq9MNsmJqYx-pT0gmnrsvQyFba1/view?usp=sharing |
 
-Repositorio privado; el autor lo abre como público el día de la entrega, para su evaluación.
+Repositorio público para su evaluación.
 Licencia propietaria: ver `LICENSE`.
 
 Estructura del repositorio:
